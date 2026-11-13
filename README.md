@@ -1,10 +1,18 @@
 # PaperVault
 
+> **I'm Yash, and I'm looking for work.** I built PaperVault because I wanted to find things on my PC even when I couldn't remember the filename. If this project makes you think I'd be a good fit for your team, I'd love to hear from you. I'm open to jobs, internships, research roles, and collaborations in AI or software. A referral or an introduction would mean a lot, too.
+>
+> **[Message me on LinkedIn](https://www.linkedin.com/in/yash-harwani/)** · [GitHub](https://github.com/yashharwani18)
+
 Describe it. Find it across your entire PC.
 
 Search the documents, notes, code, spreadsheets, and books on your computer by what they mean, with local neural embeddings.
 
 [Download for Windows (.exe)](https://github.com/yashharwani18/PaperVault/releases/latest) · [Run from Source](#run-from-source) · Free and open source · Everything runs on your computer
+
+![PaperVault searches for why sigmoid activations cause vanishing gradients and opens the highlighted passage on PDF page 225](docs/papervault-search.gif)
+
+Demo source: [*Dive into Deep Learning*, §5.4](https://en.d2l.ai/chapter_multilayer-perceptrons/numerical-stability-and-init.html) by Aston Zhang, Zachary C. Lipton, Mu Li, and Alexander J. Smola ([CC BY-SA 4.0](https://github.com/d2l-ai/d2l-en/blob/master/LICENSE)). The recording shows a highlighted excerpt.
 
 ---
 

@@ -257,6 +257,32 @@ def test_general_qwen_interpretation_is_used_with_original_query(api, monkeypatc
     assert embeddings[-1]=='find routes in a graph\nDijkstra shortest path algorithms'
     assert data['results'][0]['document_id']==doc['id']
 
+def test_search_preview_prioritizes_formats_and_respects_scope(api, monkeypatch):
+    client, desktop, folder = api
+    docs = [upload(api, f'notes-{n}.txt', f'Shortest path algorithms. Note {n}.'.encode()) for n in range(6)]
+    filenames = ['slides.pptx', 'notes.docx', 'sheet.csv', 'notes.pdf', 'other.pdf', 'readme.txt']
+    with desktop.lib() as lib, lib.db:
+        lib.db.executemany('UPDATE documents SET filename=? WHERE id=?',
+                           [(filename, doc['id']) for filename, doc in zip(filenames, docs)])
+
+    def unexpected_model_call(*args):
+        pytest.fail('Quick matches should use the existing text index')
+
+    monkeypatch.setattr(desktop.model, 'query', unexpected_model_call)
+    monkeypatch.setattr(desktop.interpreter, 'interpret_general', unexpected_model_call)
+    body = {'query': 'find shortest path', 'folder_id': folder, 'preview_only': True}
+    response = client.post('/api/search', json=body)
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data['mode'] == 'preview'
+    hits = data['results']
+    assert [hit['filename'].rsplit('.', 1)[-1] for hit in hits] == ['pdf', 'docx', 'csv', 'pptx', 'txt']
+    assert all(hit['source_identity'] and 'Shortest path' in hit['passage'] for hit in hits)
+    assert client.post('/api/search', json={**body, 'query': 'ext:csv shortest path'}).json()['results'][0]['filename'] == 'sheet.csv'
+    assert client.post('/api/search', json={**body, 'document_ids': []}).json()['results'] == []
+    assert client.post('/api/search', json={**body, 'bills_only': True}).json()['results'] == []
+
+
 def test_literal_results_survive_semantic_model_failure(api, monkeypatch):
     client,desktop,folder=api
     doc=upload(api,'notes.txt',b'EXPERIMENT 45 contains a concrete identifier')

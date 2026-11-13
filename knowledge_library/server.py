@@ -68,6 +68,7 @@ class SearchBody(BaseModel):
     bill_filters:dict[str,str]=Field(default_factory=dict)
     diversify:bool=False
     content_only:bool=False
+    preview_only:bool=False
     matching:dict=Field(default_factory=lambda:{'mode':'auto'})
     amount_field:str|None=None
     linked_folder_id:str|None=None
@@ -918,7 +919,7 @@ def create_app(root=None,device='cuda',*,preload=False):
         filename_started=time.perf_counter()
         # A whole-filename match is a document match, not a fabricated passage.
         # Explicit in-document, bill and content-only searches retain their normal path.
-        if not body.content_only and not body.document_id and not body.bills_only and not any(body.bill_filters.values()):
+        if not body.preview_only and not body.content_only and not body.document_id and not body.bills_only and not any(body.bill_filters.values()):
             matches=(await filename_matches(body))['matches']
             if matches:
                 matches=sorted(matches,key=lambda item:(item['folder'].casefold(),item['filename'].casefold(),item['document_id']))
@@ -940,13 +941,6 @@ def create_app(root=None,device='cuda',*,preload=False):
             from .search_response import respond
             started=time.perf_counter()
             interpretation=None
-            try:
-                semantic_interpretation=desktop.interpreter.interpret_general(original_query)
-                general_interpreter='qwen'
-            except (ValueError,OSError):
-                semantic_interpretation=''
-                general_interpreter='unavailable'
-
             # Extract power-user search prefixes (folder:, bill:, ext:, party:, date:)
             prefixes={'folder_id':None,'bills_only':False,'bill_filters':{},'ext':None,'applied':[]}
             clean_q=body.query.strip()
@@ -1009,6 +1003,27 @@ def create_app(root=None,device='cuda',*,preload=False):
             if body.amount_field not in (None,'total','subtotal'):raise ValueError('Choose total or subtotal.')
             # Exact English field lookups and recognized identifiers bypass generation.
             amount=query_amount(search_query)
+            if body.preview_only:
+                preview=[]
+                if not active_bills_only and not any(body.bill_filters.values()) and not amount and not candidate(search_query):
+                    # Structured bill searches have their own match rules.
+                    intent=search_bills(lib,search_query,folder_id=active_folder,document_id=body.document_id,document_ids=document_ids)
+                    if intent is None:
+                        preview=lib.search(search_query,folder_id=active_folder,document_id=body.document_id,
+                            document_ids=document_ids,top_k=5,mode='preview')['results']
+                        for hit in preview:
+                            hit['match_reasons']=['Indexed keyword match']
+                            hit['source_identity']=f"{hit['document_id']}:{hit['source_sha256']}:{hit['source_revision']}:{hit['chunk_index']}:{hit['page_number']}"
+                return dict(query=original_query,mode='preview',results=preview,elapsed_s=time.perf_counter()-started,
+                    reliability='keyword_preview',empty_reason=None,closest_available=False,below_cutoff=False)
+
+            try:
+                semantic_interpretation=desktop.interpreter.interpret_general(original_query)
+                general_interpreter='qwen'
+            except (ValueError,OSError):
+                semantic_interpretation=''
+                general_interpreter='unavailable'
+
             if not amount and candidate(search_query):
                 intent=parse_query(search_query,all_bills(lib),aliases(lib))
                 needs_interpretation=not intent['invoice_number'] and (not intent['date_from'] or re.search(r'\b(?:ka|wala|wali|dikha|dikhao|becha|kharida)\b',search_query,re.I))
@@ -1046,10 +1061,10 @@ def create_app(root=None,device='cuda',*,preload=False):
                 result['diagnostics']=diagnostics(lib,active_folder,diagnostic_ids)
                 result['elapsed_s']=time.perf_counter()-started
                 return result
-            from .retrieval import literal_match, literal_query
+            from .retrieval import literal_query
             literal_text=literal_query(search_query)
-            literal_response=lib.search(literal_text,folder_id=active_folder,document_id=body.document_id,document_ids=document_ids,top_k=100,mode='literal')
-            exact=[h for h in literal_response['results'] if literal_match(literal_text,h['passage'])]
+            literal_response=lib.search(literal_text,folder_id=active_folder,document_id=body.document_id,document_ids=document_ids,top_k=5,mode='literal')
+            exact=literal_response['results']
             for hit in exact:hit['match_reasons']=['Exact text match in indexed passage']
             semantic_unavailable=False
             try:
@@ -1087,7 +1102,7 @@ def create_app(root=None,device='cuda',*,preload=False):
             result['diagnostics']=diagnostics(lib,active_folder,diagnostic_ids)
             result['elapsed_s']=time.perf_counter()-started
             return result
-        return await desktop.search_work(run)
+        return await (desktop.metadata_work(run) if body.preview_only else desktop.search_work(run))
 
     @app.post('/api/export')
     async def export(body:ExportBody):

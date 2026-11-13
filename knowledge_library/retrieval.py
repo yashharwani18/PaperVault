@@ -11,6 +11,13 @@ import numpy as np
 # Deliberately fixed, corpus-independent English query stop list. Keep negation.
 STOP = frozenset("a an the and or of to in on at for from with by is are was were be been being it its this that these those as do does did can could would should will shall may might i me my we our you your he she they their how what which where when why who find show explain explaining notes discussing about into than then also some any all each more most very have has had get let please using use".split())
 MODES = ("keyword", "bm25_raw", "bm25", "literal", "semantic", "hybrid")
+CHUNKS_FROM = " FROM chunks c"
+SEARCH_FROM = CHUNKS_FROM + " JOIN documents d ON d.id=c.document_id JOIN folders f ON f.id=d.folder_id JOIN pages p ON p.document_id=c.document_id AND p.page_number=c.page_number"
+RESULT_COLUMNS = "c.*,d.filename,d.managed_path,d.status document_status,f.id folder_id,f.name folder_name,p.page_label,p.method extraction_method,p.warnings page_warnings"
+PREVIEW_FORMATS = (
+    ("pdf",), ("docx", "doc", "odt", "rtf"), ("csv", "tsv", "xlsx", "xls", "ods"),
+    ("pptx", "ppt", "odp"), ("txt", "md", "markdown", "epub"), ("html", "htm", "json", "jsonl"),
+)
 
 
 def terms(query, *, raw=False):
@@ -81,22 +88,75 @@ def reciprocal_rank_fusion(rows, semantic, lexical, *, semantic_weight=.5, rank_
     return sorted((tuple(v) for v in fused.values()), key=lambda pair: (-pair[1], rows[pair[0]]["id"]))
 
 
+def literal_ranking(library, query, where, parameters):
+    """Rank only phrase candidates from FTS5, with the same per-page tie breaks."""
+    words = re.findall(r"[^\W_]+", query, re.UNICODE)
+    if not words:
+        return []
+    phrase = '"' + ' '.join(words) + '"'
+    sql = ("SELECT c.id,c.document_id,c.page_number,c.text,bm25(chunks_fts) lexical_score"
+           + SEARCH_FROM + " JOIN chunks_fts ON chunks_fts.rowid=c.id WHERE chunks_fts MATCH ?")
+    if where:
+        sql += " AND " + " AND ".join(where)
+    rows, scores = [], []
+    for row in library.db.execute(sql + " ORDER BY c.id", [phrase, *parameters]):
+        if literal_match(query, row["text"]):
+            rows.append(row)
+            scores.append(-float(row["lexical_score"]))
+    return [(rows[i]["id"], score) for i, score in page_ranking(rows, scores, positive_only=True)]
+
+
+def result_row(library, chunk_id):
+    return dict(library.db.execute("SELECT " + RESULT_COLUMNS + SEARCH_FROM + " WHERE c.id=?", (chunk_id,)).fetchone())
+
+
+def preview_ranking(library, query, where, parameters, limit):
+    """Find one lexical match per file, ordered by format and then BM25."""
+    words = terms(query) or terms(query, raw=True)
+    if not words:
+        return []
+    match = "text : (" + " AND ".join(f'"{word}"' for word in words[:8]) + ")"
+    priority = "CASE " + " ".join(
+        "WHEN " + " OR ".join(f"lower(d.filename) GLOB '*.{extension}'" for extension in formats) + f" THEN {rank}"
+        for rank, formats in enumerate(PREVIEW_FORMATS)
+    ) + f" ELSE {len(PREVIEW_FORMATS)} END"
+    sql = (f"SELECT c.id,c.document_id,{priority} AS priority,bm25(chunks_fts_stemmed,1.0,0.3) AS score"
+           + SEARCH_FROM + " JOIN chunks_fts_stemmed ON chunks_fts_stemmed.rowid=c.id"
+           + " WHERE chunks_fts_stemmed MATCH ?")
+    if where:
+        sql += " AND " + " AND ".join(where)
+    ranked, extra, seen, shown_formats = [], [], set(), set()
+    for row in library.db.execute(sql + " ORDER BY priority,score,c.id", [match, *parameters]):
+        if row["document_id"] in seen:
+            continue
+        seen.add(row["document_id"])
+        hit = (row["id"], -row["score"])
+        if row["priority"] not in shown_formats:
+            shown_formats.add(row["priority"])
+            ranked.append(hit)
+        elif len(extra) < limit:
+            extra.append(hit)
+        if len(ranked) == limit:
+            break
+    return (ranked + extra)[:limit]
+
+
 class SearchIndex:
-    def __init__(self, library, *, where=(), parameters=(), vectors=True, compact=False):
+    def __init__(self, library, *, where=(), parameters=(), vectors=True, compact=False, count=None):
         self.library, self.where, self.parameters = library, list(where), list(parameters)
         self.clause = " WHERE " + " AND ".join(where) if where else ""
-        self.base = " FROM chunks c JOIN documents d ON d.id=c.document_id JOIN folders f ON f.id=d.folder_id JOIN pages p ON p.document_id=c.document_id AND p.page_number=c.page_number"
-        self.columns = "c.*,d.filename,d.managed_path,d.status document_status,f.id folder_id,f.name folder_name,p.page_label,p.method extraction_method,p.warnings page_warnings"
+        self.base = SEARCH_FROM
+        self.columns = RESULT_COLUMNS
         self.compact=compact
         if compact:
-            self.rows,self.matrix=self._compact_snapshot(vectors)
+            self.rows,self.matrix=self._compact_snapshot(vectors,count)
         else:
             self.rows = [dict(r) for r in library.db.execute("SELECT " + self.columns + self.base + self.clause + " ORDER BY c.id", parameters)]
             self.matrix = self._matrix(library) if vectors and self.rows else None
         self.by_id = {r["id"]:i for i,r in enumerate(self.rows)}
         self.word_sets = None
 
-    def _compact_snapshot(self,vectors):
+    def _compact_snapshot(self,vectors,count):
         """Stream vectors once; keep only page identities beside the matrix.
 
         Live Library.search owns a WAL read transaction across scoring and result
@@ -104,9 +164,13 @@ class SearchIndex:
         """
         columns='c.id,c.document_id,c.page_number'
         columns+=',c.dimensions,c.vector,c.vector_sha256' if vectors else ',c.text'
-        count=self.library.db.execute('SELECT count(*)'+self.base+self.clause,self.parameters).fetchone()[0]
+        # A supplied count comes from Library.search's WAL snapshot. Its
+        # foreign keys guarantee document and page identities for global scans.
+        scan_from = CHUNKS_FROM if vectors and count is not None and not self.where else self.base
+        if vectors and count is None:
+            count=self.library.db.execute('SELECT count(*)'+self.base+self.clause,self.parameters).fetchone()[0]
         rows=[];matrix=None
-        for i,row in enumerate(self.library.db.execute('SELECT '+columns+self.base+self.clause+' ORDER BY c.id',self.parameters)):
+        for i,row in enumerate(self.library.db.execute('SELECT '+columns+scan_from+self.clause+' ORDER BY c.id',self.parameters)):
             if vectors:
                 if matrix is None:matrix=np.empty((count,row['dimensions']),dtype=np.float32)
                 blob=row['vector']
@@ -131,8 +195,7 @@ class SearchIndex:
     def result_row(self,index):
         if not self.compact:return self.rows[index]
         # Fetch source text/metadata only for the pages that will be shown.
-        return dict(self.library.db.execute('SELECT '+self.columns+self.base+' WHERE c.id=?',
-                                            (self.rows[index]['id'],)).fetchone())
+        return result_row(self.library, self.rows[index]['id'])
 
     def _matrix(self,library):
         """Keep checksum checks, but validate/normalize vectors in NumPy batches."""
@@ -194,16 +257,11 @@ class SearchIndex:
         return page_ranking(self.rows, scores, positive_only=True)
 
     def literal(self, query):
-        words = re.findall(r"[^\W_]+", query, re.UNICODE)
-        if not words or not self.rows:
+        if not self.rows:
             return []
-        phrase='"'+' '.join(words).replace('"','""')+'"'
-        sql="SELECT c.id,c.text,bm25(chunks_fts) lexical_score FROM chunks c JOIN documents d ON d.id=c.document_id JOIN chunks_fts ON chunks_fts.rowid=c.id WHERE chunks_fts MATCH ?"
-        if self.where:sql+=" AND "+" AND ".join(self.where)
-        scores=np.zeros(len(self.rows),dtype=np.float64)
-        for row in self.library.db.execute(sql,[phrase,*self.parameters]):
-            if literal_match(query,row['text']):scores[self.by_id[row['id']]]=-float(row['lexical_score'])
-        return page_ranking(self.rows,scores,positive_only=True)
+        return [(self.by_id[chunk_id], score)
+                for chunk_id, score in literal_ranking(self.library, query, self.where, self.parameters)
+                if chunk_id in self.by_id]
 
     def rank(self, query, *, mode="semantic", vector=None, dimensions=768, hybrid=None, z_gate=None):
         if mode not in MODES:

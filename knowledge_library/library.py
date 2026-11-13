@@ -626,14 +626,14 @@ class Library:
 
     def _search(self, query, *, folder_id=None, document_id=None, top_k=5, min_score=None, mode="semantic",
                search_dimensions=None, hybrid=None, document_ids=None, z_gate=None, semantic_query=None):
-        from .retrieval import MODES, SearchIndex
+        from .retrieval import CHUNKS_FROM, MODES, SEARCH_FROM, SearchIndex, literal_ranking, preview_ranking, result_row
         begin = time.perf_counter()
         query = query.strip()
         if not query:
             raise ValueError("Search query cannot be empty")
         if not 1 <= top_k <= 100:
             raise ValueError("top_k must be between 1 and 100")
-        if mode not in MODES:
+        if mode not in (*MODES, "preview"):
             raise ValueError("Unknown search mode")
         dimensions = self.embedder.dimensions if search_dimensions is None else search_dimensions
         if dimensions not in (128,256,512,768) or dimensions > self.embedder.dimensions:
@@ -654,11 +654,19 @@ class Library:
             where.append("d.id=?")
             parameters.append(document_id)
         clause = " WHERE " + " AND ".join(where) if where else ""
-        base = " FROM chunks c JOIN documents d ON d.id=c.document_id JOIN folders f ON f.id=d.folder_id JOIN pages p ON p.document_id=c.document_id AND p.page_number=c.page_number"
-        count = self.db.execute("SELECT count(*)" + base + clause, parameters).fetchone()[0]
+        # Foreign keys keep every chunk attached to a document, folder and page.
+        count_from = SEARCH_FROM if where else CHUNKS_FROM
+        count = None if mode == "preview" else self.db.execute("SELECT count(*)" + count_from + clause, parameters).fetchone()[0]
         results, query_s = [], 0.
-        select = "SELECT c.*,d.filename,d.managed_path,d.status document_status,f.id folder_id,f.name folder_name,p.page_label,p.method extraction_method,p.warnings page_warnings"
-        if count:
+        if mode == "preview":
+            ranking = preview_ranking(self, query, where, parameters, top_k)
+            results = [self._result(result_row(self, chunk_id), score, "fts5_bm25")
+                       for chunk_id, score in ranking]
+        elif count and mode == "literal":
+            ranking = literal_ranking(self, query, where, parameters)
+            results = [self._result(result_row(self, chunk_id), score, "exact_text")
+                       for chunk_id, score in ranking[:top_k]]
+        elif count:
             if mode in ("semantic", "hybrid"):
                 profile = self._profile()
                 self._check_profile(profile)
@@ -667,20 +675,18 @@ class Library:
                 query_s = time.perf_counter() - encode_start
             else:
                 vector = None
-            index = SearchIndex(self, where=where, parameters=parameters, vectors=mode in ("semantic","hybrid"),compact=True)
+            index = SearchIndex(self, where=where, parameters=parameters, vectors=mode in ("semantic","hybrid"),compact=True,count=count)
             ranking = index.rank(query, mode=mode, vector=vector, dimensions=dimensions, hybrid=hybrid, z_gate=z_gate)
             if min_score is not None:
                 ranking = [(i,s) for i,s in ranking if s >= min_score]
-            kind = {"semantic":"cosine","hybrid":"weighted_rrf","keyword":"distinct_query_terms","literal":"exact_text"}.get(mode,"fts5_bm25")
+            kind = {"semantic":"cosine","hybrid":"weighted_rrf","keyword":"distinct_query_terms"}.get(mode,"fts5_bm25")
             results = [self._result(index.result_row(i), score, kind) for i,score in ranking[:top_k]]
-            for rank, result in enumerate(results, 1):
-                result["rank"] = rank
-                if hasattr(index, 'last_z_scores') and index.last_z_scores is not None and result.get('chunk_id') in index.by_id:
-                    c_idx = index.by_id[result['chunk_id']]
-                    result['z_score'] = round(float(index.last_z_scores[c_idx]), 2)
-        else:
-            for rank, result in enumerate(results, 1):
-                result["rank"] = rank
+            if getattr(index, "last_z_scores", None) is not None:
+                for result in results:
+                    c_idx = index.by_id[result["chunk_id"]]
+                    result["z_score"] = round(float(index.last_z_scores[c_idx]), 2)
+        for rank, result in enumerate(results, 1):
+            result["rank"] = rank
         return {"query": query, "folder_id": folder_id, "document_id": document_id, "mode": mode,
                 "scoped_chunks": count, "results": results, "elapsed_s": time.perf_counter() - begin,
                 "query_embedding_s": query_s, "min_score": min_score,
