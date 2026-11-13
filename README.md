@@ -8,7 +8,7 @@ Describe it. Find it across your entire PC.
 
 Search the documents, notes, code, spreadsheets, and books on your computer by what they mean, with local neural embeddings.
 
-[Download for Windows (.exe)](https://github.com/yashharwani18/PaperVault/releases/latest) · [Download Android preview (.apk)](https://github.com/yashharwani18/PaperVault/releases/download/android-v0.5.0/PaperVault-Android-v0.5.0.apk) · [Run from Source](#run-from-source)
+[Set up on Windows](#windows-setup) · [Download Android preview (.apk)](https://github.com/yashharwani18/PaperVault/releases/download/android-v0.5.0/PaperVault-Android-v0.5.0.apk)
 
 **Android preview:** I don’t recommend it for everyday use yet. Initial indexing can take a long time on a phone, especially with a large library. [Android install instructions](#android-preview)
 
@@ -113,42 +113,29 @@ PaperVault runs EmbeddingGemma 2 locally using PyTorch CUDA on NVIDIA GPUs (fall
 
 ## Install
 
-### Windows Installer (Recommended)
-1. Download `PaperVault-Setup.exe` from [Releases](https://github.com/yashharwani18/PaperVault/releases/latest).
-2. Run the installer (installs locally for your user account without requiring administrator rights).
-3. Open PaperVault, select **"Yes, scan this computer"**, and let it build your local index in the background.
+### Windows setup
+
+The Windows installer is pending. You can run PaperVault from source on 64-bit Windows 10 or 11. Install Git, Node.js 24 with npm, and [uv](https://docs.astral.sh/uv/getting-started/installation/). First-time setup needs internet access to download the dependencies and model.
+
+In PowerShell, clone the repository and run the setup script:
+
+```powershell
+git clone https://github.com/yashharwani18/PaperVault.git
+cd PaperVault
+.\Setup-Library.cmd -NoShortcuts
+```
+
+Start the app, then open [PaperVault on this PC](http://127.0.0.1:8765) in your browser:
+
+```powershell
+.\.venv\Scripts\python.exe -m knowledge_library.server --device cpu
+```
+
+Use `--device cuda` if you have a compatible NVIDIA GPU and driver. Add a few documents or choose **"Yes, scan this computer"** to build your local index.
 
 ### Android preview
 
 Download the [PaperVault APK](https://github.com/yashharwani18/PaperVault/releases/download/android-v0.5.0/PaperVault-Android-v0.5.0.apk) on an ARM64 phone running Android 8 or later. Open the downloaded file and allow installation from that source if Android asks. Leave about 3 GB of free space for the installer, app, and bundled models, plus space for your documents. Start with a few PDFs to see how quickly your phone indexes them.
-
-### Run from Source
-
-#### Prerequisites
-* Windows 10 or 11 (64-bit)
-* Python 3.11 or 3.12
-* Node.js 18+ (for frontend development)
-* NVIDIA GPU with CUDA 12+ recommended (CPU supported)
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/yashharwani18/PaperVault.git
-cd PaperVault
-
-# 2. Set up Python virtual environment
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.lock.txt
-
-# 3. Build the frontend
-cd frontend
-npm install
-npm run build
-cd ..
-
-# 4. Launch PaperVault
-python -m knowledge_library --library "data/library"
-```
 
 ---
 
