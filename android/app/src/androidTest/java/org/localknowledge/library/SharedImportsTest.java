@@ -44,7 +44,7 @@ public class SharedImportsTest {
             JSONObject first=SharedImports.capture(context(),b,Collections.singletonList(uri(source)));assertEquals(1,first.getJSONArray("task_ids").length());String task=first.getJSONArray("task_ids").getString(0);
             JSONObject row=b.store.one("SELECT * FROM tasks WHERE id=?",task);File owned=new File(row.getString("source_path"));
             assertTrue(owned.isFile());assertEquals(new File(b.store.root,"sources").getCanonicalFile(),owned.getParentFile().getCanonicalFile());assertEquals(hash,LibraryStore.hash(owned));assertEquals(1,row.getInt("ocr"));assertEquals(0,row.getInt("is_reference"));assertEquals("file",Uri.parse(row.getString("source_uri")).getScheme());
-            assertEquals("Shared with Khoj",b.store.one("SELECT name FROM folders WHERE id=?",row.getString("folder_id")).getString("name"));
+            assertEquals("Shared with PaperVault",b.store.one("SELECT name FROM folders WHERE id=?",row.getString("folder_id")).getString("name"));
             JSONObject again=SharedImports.capture(context(),b,Arrays.asList(uri(source),uri(source)));assertEquals(1,again.getJSONArray("task_ids").length());assertEquals(task,again.getJSONArray("task_ids").getString(0));assertEquals(hash,LibraryStore.hash(source));assertEquals(before,partials());
         }finally{b.paused=old;source.delete();}
     }

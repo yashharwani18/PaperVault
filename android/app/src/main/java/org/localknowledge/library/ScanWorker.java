@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.work.*;
 import java.util.concurrent.TimeUnit;
 
-/** WorkManager only discovers files. Indexing resumes when the user opens Khoj. */
+/** WorkManager only discovers files. Indexing resumes when the user opens PaperVault. */
 public final class ScanWorker extends Worker {
     final ScanPolicy.DiscoveryToken discoveryToken=new ScanPolicy.DiscoveryToken();
     static final String NAME="phone-pdf-discovery";

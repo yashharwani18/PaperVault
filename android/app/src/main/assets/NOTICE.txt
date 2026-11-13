@@ -1,4 +1,4 @@
-Khoj offline Android application v0.5
+PaperVault offline Android application v0.5
 
 Bundled models:
 Qwen3 0.6B Q4_K_M — Qwen/Qwen3-0.6B (Apache-2.0).

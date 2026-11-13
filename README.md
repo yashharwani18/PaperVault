@@ -8,7 +8,9 @@ Describe it. Find it across your entire PC.
 
 Search the documents, notes, code, spreadsheets, and books on your computer by what they mean, with local neural embeddings.
 
-[Download for Windows (.exe)](https://github.com/yashharwani18/PaperVault/releases/latest) · [Run from Source](#run-from-source) · Free and open source · Everything runs on your computer
+[Download for Windows (.exe)](https://github.com/yashharwani18/PaperVault/releases/latest) · [Download Android preview (.apk)](https://github.com/yashharwani18/PaperVault/releases/download/android-v0.5.0/PaperVault-Android-v0.5.0.apk) · [Run from Source](#run-from-source)
+
+**Android preview:** I don’t recommend it for everyday use yet. Initial indexing can take a long time on a phone, especially with a large library. [Android install instructions](#android-preview)
 
 ![PaperVault searches for why sigmoid activations cause vanishing gradients and opens the highlighted passage on PDF page 225](docs/papervault-search.gif)
 
@@ -115,6 +117,10 @@ PaperVault runs EmbeddingGemma 2 locally using PyTorch CUDA on NVIDIA GPUs (fall
 1. Download `PaperVault-Setup.exe` from [Releases](https://github.com/yashharwani18/PaperVault/releases/latest).
 2. Run the installer (installs locally for your user account without requiring administrator rights).
 3. Open PaperVault, select **"Yes, scan this computer"**, and let it build your local index in the background.
+
+### Android preview
+
+Download the [PaperVault APK](https://github.com/yashharwani18/PaperVault/releases/download/android-v0.5.0/PaperVault-Android-v0.5.0.apk) on an ARM64 phone running Android 8 or later. Open the downloaded file and allow installation from that source if Android asks. Leave about 3 GB of free space for the installer, app, and bundled models, plus space for your documents. Start with a few PDFs to see how quickly your phone indexes them.
 
 ### Run from Source
 

@@ -101,7 +101,7 @@ def main():
     version_code,version_name=build_version()
     assert f"versionName='{version_name}'" in badging.stdout
     assert f"versionCode='{version_code}'" in badging.stdout
-    assert "application-label:'Khoj'" in badging.stdout
+    assert "application-label:'PaperVault'" in badging.stdout
     if args.variant=='release':assert "application-debuggable" not in badging.stdout
     with zipfile.ZipFile(source) as z:
         names=z.namelist();manifest=verify_model_assets(z,args.models)

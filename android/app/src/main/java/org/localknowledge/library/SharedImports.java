@@ -37,7 +37,7 @@ final class SharedImports {
     private static void add(Set<Uri> out,Uri uri){if(out.size()<MAX_FILES&&uri!=null&&"content".equalsIgnoreCase(uri.getScheme()))out.add(uri);}
 
     static synchronized JSONObject capture(Context context,NativeBackend backend,List<Uri> selected)throws Exception {
-        if(selected==null||selected.isEmpty()||selected.size()>MAX_FILES)throw new IOException("Share between 1 and 50 PDF files with Khoj.");
+        if(selected==null||selected.isEmpty()||selected.size()>MAX_FILES)throw new IOException("Share between 1 and 50 PDF files with PaperVault.");
         List<File> staged=new ArrayList<>();List<String> names=new ArrayList<>();
         JSONArray tasks=new JSONArray(),documents=new JSONArray();Set<String> seenTasks=new HashSet<>(),seenDocuments=new HashSet<>();
         long total=0;
@@ -46,7 +46,7 @@ final class SharedImports {
             for(Uri uri:new LinkedHashSet<>(selected)){
                 if(uri==null||!"content".equalsIgnoreCase(uri.getScheme()))throw new IOException("Only shared PDF content is supported.");
                 String mime=context.getContentResolver().getType(uri);
-                if(mime!=null&&!"application/pdf".equalsIgnoreCase(mime)&&!"application/octet-stream".equalsIgnoreCase(mime))throw new IOException("Only PDF files can be shared with Khoj.");
+                if(mime!=null&&!"application/pdf".equalsIgnoreCase(mime)&&!"application/octet-stream".equalsIgnoreCase(mime))throw new IOException("Only PDF files can be shared with PaperVault.");
                 File partial=File.createTempFile("khoj-share-",".partial",context.getCacheDir());staged.add(partial);names.add(filename(context,uri));
                 try(InputStream in=context.getContentResolver().openInputStream(uri);FileOutputStream out=new FileOutputStream(partial)){
                     if(in==null)throw new IOException("The shared PDF could not be opened.");
@@ -81,10 +81,10 @@ final class SharedImports {
                     throw failure;
                 }
             }
-            return Json.obj("task_ids",tasks,"document_ids",documents,"message",tasks.length()>0?"Shared PDFs added to Khoj. Reading continues in the background.":"These PDFs are already in Khoj.");
-        }catch(SecurityException denied){throw new IOException("Khoj could not read the shared PDF. Share it again from the app that owns it.");}
-        catch(IOException expected){String message=expected.getMessage();if(message!=null&&(message.startsWith("Only ")||message.startsWith("Each shared ")||message.startsWith("Share at most ")||message.startsWith("A shared file ")))throw new IOException(message);throw new IOException("Could not capture the shared PDFs. Share them again; files already added remain in Khoj.");}
-        catch(Exception failure){throw new IOException("Could not capture the shared PDFs. Share them again; files already added remain in Khoj.");}
+            return Json.obj("task_ids",tasks,"document_ids",documents,"message",tasks.length()>0?"Shared PDFs added to PaperVault. Reading continues in the background.":"These PDFs are already in PaperVault.");
+        }catch(SecurityException denied){throw new IOException("PaperVault could not read the shared PDF. Share it again from the app that owns it.");}
+        catch(IOException expected){String message=expected.getMessage();if(message!=null&&(message.startsWith("Only ")||message.startsWith("Each shared ")||message.startsWith("Share at most ")||message.startsWith("A shared file ")))throw new IOException(message);throw new IOException("Could not capture the shared PDFs. Share them again; files already added remain in PaperVault.");}
+        catch(Exception failure){throw new IOException("Could not capture the shared PDFs. Share them again; files already added remain in PaperVault.");}
         finally{for(File file:staged)if(file.exists())file.delete();}
     }
     private static String existingDocument(NativeBackend backend,String sha)throws Exception {
@@ -94,8 +94,8 @@ final class SharedImports {
         }return null;
     }
     private static String folder(LibraryStore store){
-        JSONArray found=store.query("SELECT id FROM folders WHERE name=? COLLATE NOCASE LIMIT 1","Shared with Khoj");if(found.length()>0)return found.optJSONObject(0).optString("id");
-        String id=LibraryStore.id(),now=LibraryStore.now();store.exec("INSERT OR IGNORE INTO folders VALUES(?,?,?,?,?)",id,"Shared with Khoj","#A78BFA",now,now);return store.one("SELECT id FROM folders WHERE name=? COLLATE NOCASE","Shared with Khoj").optString("id");
+        JSONArray found=store.query("SELECT id FROM folders WHERE name COLLATE NOCASE IN (?, ?) ORDER BY name=? DESC LIMIT 1","Shared with PaperVault","Shared with Khoj","Shared with PaperVault");if(found.length()>0)return found.optJSONObject(0).optString("id");
+        String id=LibraryStore.id(),now=LibraryStore.now();store.exec("INSERT OR IGNORE INTO folders VALUES(?,?,?,?,?)",id,"Shared with PaperVault","#A78BFA",now,now);return store.one("SELECT id FROM folders WHERE name=? COLLATE NOCASE","Shared with PaperVault").optString("id");
     }
     private static String filename(Context context,Uri uri){
         String value="Shared PDF.pdf";

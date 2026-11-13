@@ -23,7 +23,7 @@ public final class ImportService extends Service {
         if(backend.paused||backend.closed||(backend.chargingOnly&&!backend.plugged())){releaseWakeLock();return;}
         boolean work=AndroidSharing.active()||backend.phoneScan.finding||backend.store.one("SELECT count(*) n FROM tasks WHERE status IN ('queued','running','skipping')").optInt("n")>0;
         if(!work){releaseWakeLock();return;}
-        if(indexingWakeLock==null){indexingWakeLock=getSystemService(PowerManager.class).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"Khoj:Indexing");indexingWakeLock.setReferenceCounted(false);}
+        if(indexingWakeLock==null){indexingWakeLock=getSystemService(PowerManager.class).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"PaperVault:Indexing");indexingWakeLock.setReferenceCounted(false);}
         long now=SystemClock.elapsedRealtime();
         if(!indexingWakeLock.isHeld()||now>=wakeRenewAt){indexingWakeLock.acquire(10*60*1000L);wakeRenewAt=now+5*60*1000L;}
     }
@@ -44,7 +44,7 @@ public final class ImportService extends Service {
 
         PendingIntent control=PendingIntent.getService(this,backend.paused?2:1,new Intent(this,ImportService.class).setAction(backend.paused?ACTION_RESUME:ACTION_PAUSE),PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification.Builder builder=new Notification.Builder(this,"imports").setSmallIcon(org.localknowledge.library.R.drawable.ic_library).setContentTitle("Khoj").setContentText(text).setContentIntent(open).setOngoing(true)
+        Notification.Builder builder=new Notification.Builder(this,"imports").setSmallIcon(org.localknowledge.library.R.drawable.ic_library).setContentTitle("PaperVault").setContentText(text).setContentIntent(open).setOngoing(true)
 
             .addAction(new Notification.Action.Builder(null,backend.paused?"Resume":"Pause",control).build());
 

@@ -23,7 +23,7 @@ public class KhojFeaturesTest {
     @Test public void releasePrivacyAndOrganizationWork()throws Exception {
         Context context=InstrumentationRegistry.getInstrumentation().getTargetContext();
         NativeBackend backend=((LibraryApplication)context.getApplicationContext()).backend;
-        assertEquals("Khoj",backend.dispatch("/about","GET",new JSONObject()).getString("name"));
+        assertEquals("PaperVault",backend.dispatch("/about","GET",new JSONObject()).getString("name"));
         String privateValue="PRIVATE_KHOJ_DIAGNOSTIC_"+System.nanoTime();
         String first=backend.dispatch("/folders","POST",Json.obj("name",privateValue)).getString("id");
         String second=backend.dispatch("/folders","POST",Json.obj("name",privateValue+" second")).getString("id");
@@ -42,7 +42,7 @@ public class KhojFeaturesTest {
             assertEquals("missing",backend.dispatch("/documents/"+id+"/recovery","GET",new JSONObject()).getJSONObject("source").getString("code"));
             String diagnostic=backend.dispatch("/diagnostics","POST",new JSONObject()).toString();
             assertFalse(diagnostic.contains(privateValue));assertFalse(diagnostic.contains("source_path"));assertFalse(diagnostic.contains(context.getFilesDir().toString()));
-            assertEquals("Khoj",new JSONObject(diagnostic).getJSONObject("product").getString("name"));
+            assertEquals("PaperVault",new JSONObject(diagnostic).getJSONObject("product").getString("name"));
             boolean found=false;for(JSONObject doc:LibraryStore.objects(backend.state().getJSONArray("documents")))if(doc.getString("id").equals(id)){assertEquals("Saved personal name",doc.getString("display_title"));found=true;}assertTrue(found);
         } finally {backend.store.exec("DELETE FROM documents WHERE id=?",id);backend.store.exec("DELETE FROM folders WHERE id IN (?,?)",first,second);}
     }

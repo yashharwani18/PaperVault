@@ -20,8 +20,8 @@ final class LibraryQoL {
         }
         if(path.equals("/reading-state")&&method.equals("GET"))return state();
         String[] p=path.split("/");if(p.length==4&&p[1].equals("documents")&&p[3].equals("reading-state")){
-            JSONObject doc=s.document(p[2]);if(doc.optInt("trashed")!=0)throw new IllegalArgumentException("This file was removed from Khoj.");
-            if(hidden(doc))throw new IllegalArgumentException("This file is ignored. Include it in Khoj first.");
+            JSONObject doc=s.document(p[2]);if(doc.optInt("trashed")!=0)throw new IllegalArgumentException("This file was removed from PaperVault.");
+            if(hidden(doc))throw new IllegalArgumentException("This file is ignored. Include it in PaperVault first.");
             if(method.equals("GET"))return read(doc);
             if(!method.equals("POST"))throw new IllegalArgumentException("Use the reading controls to update this file.");
             if(body.has("sha256")&&!body.optString("sha256").equals(doc.optString("sha256")))throw new IllegalArgumentException("This file changed. Open its latest version.");

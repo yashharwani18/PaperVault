@@ -35,7 +35,7 @@ final class AndroidVoiceInput {
         .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
         .putExtra(RecognizerIntent.EXTRA_LANGUAGE,language)
         .putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,1)
-        .putExtra(RecognizerIntent.EXTRA_PROMPT,"Speak your Khoj search. Android speech may use internet.");}
+        .putExtra(RecognizerIntent.EXTRA_PROMPT,"Speak your PaperVault search. Android speech may use internet.");}
     static String transcript(List<String> values){if(values!=null)for(String value:values)if(value!=null&&!value.trim().isEmpty()){
         String text=value.trim().replaceAll("\\s+"," ");if(text.length()>500)throw new IllegalArgumentException("That search is too long. Speak a shorter query or edit it by typing.");return text;
     }throw new IllegalArgumentException("No words were recognized. Try again or type your search.");}

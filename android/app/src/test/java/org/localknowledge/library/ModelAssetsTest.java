@@ -37,7 +37,7 @@ public class ModelAssetsTest {
     @Test public void freshSmallInstallFailsPromptlyWithFullInstallerGuidance() throws Exception {
         ModelAssets update=new ModelAssets(temporary.newFolder(),assets(false));
         try{update.ready.get(5,TimeUnit.SECONDS);fail("Missing models must prevent readiness");}
-        catch(ExecutionException expected){assertTrue(update.error.contains("complete Khoj APK"));}
+        catch(ExecutionException expected){assertTrue(update.error.contains("complete PaperVault APK"));}
         assertEquals("error",update.state);
     }
     @Test public void damagedSmallInstallRetainsEveryExistingFile() throws Exception {
@@ -46,7 +46,7 @@ public class ModelAssetsTest {
         Files.write(damaged.toPath(),broken);Files.write(good.toPath(),WEIGHT);
         ModelAssets update=new ModelAssets(directory,assets(false));
         try{update.ready.get(5,TimeUnit.SECONDS);fail("Damaged models must prevent readiness");}
-        catch(ExecutionException expected){assertTrue(update.error.contains("complete Khoj APK"));}
+        catch(ExecutionException expected){assertTrue(update.error.contains("complete PaperVault APK"));}
         assertArrayEquals(broken,Files.readAllBytes(damaged.toPath()));
         assertArrayEquals(WEIGHT,Files.readAllBytes(good.toPath()));
     }
@@ -57,7 +57,7 @@ public class ModelAssetsTest {
         byte[] metadata=recipe().getBytes(StandardCharsets.UTF_8);
         ModelAssets broken=new ModelAssets(directory,name->new ByteArrayInputStream(name.equals("offline-models.json")?metadata:new byte[]{1,2,3}));
         try{broken.ready.get(5,TimeUnit.SECONDS);fail("An invalid bundled model must not be installed");}
-        catch(ExecutionException expected){assertTrue(broken.error.contains("complete Khoj APK"));}
+        catch(ExecutionException expected){assertTrue(broken.error.contains("complete PaperVault APK"));}
         assertArrayEquals(retained,Files.readAllBytes(existing.toPath()));
         assertFalse(new File(directory,TEXT_MODEL+".partial").exists());
     }

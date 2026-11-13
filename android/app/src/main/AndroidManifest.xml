@@ -11,7 +11,7 @@
     <queries><intent><action android:name="android.speech.RecognitionService"/></intent><intent><action android:name="android.speech.action.RECOGNIZE_SPEECH"/></intent></queries>
     <uses-permission android:name="android.permission.INTERNET" tools:node="remove"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove"/>
-    <application android:name=".LibraryApplication" android:theme="@android:style/Theme.Material.NoActionBar" android:label="Khoj"
+    <application android:name=".LibraryApplication" android:theme="@android:style/Theme.Material.NoActionBar" android:label="PaperVault"
         android:icon="@drawable/ic_library" android:allowBackup="false" android:usesCleartextTraffic="false"
         android:requestLegacyExternalStorage="true" android:supportsRtl="true" android:enableOnBackInvokedCallback="true" android:extractNativeLibs="true">
         <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:configChanges="orientation|screenSize|keyboardHidden" android:windowSoftInputMode="adjustResize">
