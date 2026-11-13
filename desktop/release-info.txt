@@ -1,9 +1,9 @@
-Khoj - offline Windows release candidate
+PaperVault for Windows
 
-Includes the document engine, Python runtime and AI models. You do not need to install Python, Node or CUDA separately. A usable NVIDIA CUDA device is selected automatically; other computers use the CPU.
+Includes the document engine, Python runtime and local search model. This build runs search and indexing on the CPU. You do not need to install Python or Node separately.
 
 Setup installs for your Windows account. Your library is stored separately under %LOCALAPPDATA%\LocalKnowledgeLibrary\library. Upgrade and uninstall preserve this library and your original PDFs.
 
-No scan begins until you choose to scan this computer or connect a folder. Scanning indexes PDFs in place without copying originals. Optional Claude requests remain opt-in; normal indexing and search run offline.
+No scan begins until you choose to scan this computer or connect a folder. Scanning indexes documents in place. Normal indexing and search run offline.
 
-PRIVATE TEST BUILD: This release candidate is unsigned. Public closed-source distribution requires resolving the PDF engine's commercial licensing and completing testing on a separate clean computer.
+This installer is unsigned.

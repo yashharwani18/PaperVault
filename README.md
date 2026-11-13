@@ -8,7 +8,7 @@ Describe it. Find it across your entire PC.
 
 Search the documents, notes, code, spreadsheets, and books on your computer by what they mean, with local neural embeddings.
 
-[Set up on Windows](#windows-setup) · [Download Android preview (.apk)](https://github.com/yashharwani18/PaperVault/releases/download/android-v0.5.0/PaperVault-Android-v0.5.0.apk)
+[Download for Windows (.exe)](https://github.com/yashharwani18/PaperVault/releases/download/windows-v0.5.0/PaperVault-Setup-0.5.0.exe) · [Download Android preview (.apk)](https://github.com/yashharwani18/PaperVault/releases/download/android-v0.5.0/PaperVault-Android-v0.5.0.apk)
 
 **Android preview:** I don’t recommend it for everyday use yet. Initial indexing can take a long time on a phone, especially with a large library. [Android install instructions](#android-preview)
 
@@ -115,7 +115,11 @@ PaperVault runs EmbeddingGemma 2 locally using PyTorch CUDA on NVIDIA GPUs (fall
 
 ### Windows setup
 
-The Windows installer is pending. You can run PaperVault from source on 64-bit Windows 10 or 11. Install Git, Node.js 24 with npm, and [uv](https://docs.astral.sh/uv/getting-started/installation/). First-time setup needs internet access to download the dependencies and model.
+Download and run [PaperVault Setup](https://github.com/yashharwani18/PaperVault/releases/download/windows-v0.5.0/PaperVault-Setup-0.5.0.exe) on 64-bit Windows 10 or 11, then open PaperVault from the Start menu. The unsigned installer bundles the local search model and runs search and indexing on the CPU.
+
+#### Run from source
+
+Install Git, Node.js 24 with npm, and [uv](https://docs.astral.sh/uv/getting-started/installation/). First-time setup needs internet access to download the dependencies and model.
 
 In PowerShell, clone the repository and run the setup script:
 

@@ -35,7 +35,7 @@ InfoBeforeFile=release-info.txt
 
 [Tasks]
 Name: desktopicon; Description: "Create a desktop shortcut"; GroupDescription: "Shortcuts:"; Flags: unchecked
-Name: startupicon; Description: "Start PaperVault automatically when Windows starts"; GroupDescription: "Startup:"; Flags: checkedonce
+Name: startupicon; Description: "Start PaperVault automatically when Windows starts"; GroupDescription: "Startup:"; Flags: unchecked
 
 [Files]
 Source: "{#Payload}\*"; DestDir: "{app}"; Excludes: "*.pdb,*.map,*.pyc,*.pyo,\app\.cache\*,\data\*,Library.user.json"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -69,7 +69,7 @@ function InitializeSetup: Boolean;
 var Release: Cardinal;
 begin
   Result := RegQueryDWordValue(HKLM32, 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full', 'Release', Release) and (Release >= 461808);
-  if not Result then MsgBox('Khoj requires .NET Framework 4.7.2 or newer. Install the Microsoft runtime, then run setup again. Your library has not been changed.', mbError, MB_OK);
+  if not Result then MsgBox('PaperVault requires .NET Framework 4.7.2 or newer. Install the Microsoft runtime, then run setup again.', mbError, MB_OK);
 end;
 
 function PrepareToInstall(var NeedsRestart: Boolean): String;
@@ -78,11 +78,11 @@ begin
   Result := '';
   if FileExists(ExpandConstant('{app}\Library.exe')) then begin
     if not Exec(ExpandConstant('{app}\Library.exe'), '--quit --wait', '', SW_HIDE, ewWaitUntilTerminated, ExitCode) then begin
-      Result := 'Close Khoj and try setup again.';
+      Result := 'Close PaperVault and try setup again.';
       Exit;
     end;
     if ExitCode <> 0 then begin
-      Result := 'Khoj is still closing. Wait for indexing to stop, then retry setup.';
+      Result := 'PaperVault is still closing. Wait for indexing to stop, then retry setup.';
       Exit;
     end;
   end;
