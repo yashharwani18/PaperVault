@@ -4,7 +4,7 @@ import pytest
 from knowledge_library.library import Library
 from knowledge_library import workspace_features as features
 from knowledge_library import organization as org
-from tests.test_research_implementation import CountingEncoder
+from tests.test_pdf_search_regressions import CountingEncoder
 
 
 @pytest.fixture

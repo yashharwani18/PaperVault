@@ -5,7 +5,7 @@ import pytest
 from knowledge_library.library import Library
 from knowledge_library import workspace_features as topics
 from knowledge_library.search_response import respond
-from tests.test_research_implementation import CountingEncoder
+from tests.test_pdf_search_regressions import CountingEncoder
 
 
 def pdf(path,text):

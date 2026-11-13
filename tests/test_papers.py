@@ -4,7 +4,7 @@ import pymupdf
 import pytest
 
 from knowledge_library.library import Library
-from tests.test_research_implementation import CountingEncoder
+from tests.test_pdf_search_regressions import CountingEncoder
 
 
 def make_paper(path, *, title='Learning with Local Evidence', author='Ada Lovelace; Alan Turing', year='2024', doi='10.1234/local.2024'):

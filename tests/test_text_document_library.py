@@ -3,7 +3,7 @@ import tempfile
 import pytest
 import numpy as np
 from knowledge_library.library import Library
-from tests.test_research_implementation import CountingEncoder
+from tests.test_pdf_search_regressions import CountingEncoder
 from knowledge_library import maintenance
 
 class SearchEncoder(CountingEncoder):

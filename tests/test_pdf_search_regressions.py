@@ -1,4 +1,4 @@
-"""Production regressions from research fixtures, not a retrieval benchmark.
+"""Regression tests for PDF amount search, OCR evidence, and index migrations.
 
 OCR tests run the installed recognizer. CountingEncoder tests only persistence
 and exact-input vector reuse; it makes no semantic quality claim.
@@ -17,9 +17,48 @@ from knowledge_library.pdf import PdfOptions,extract_page
 from knowledge_library.evidence import physical_amounts,scoped_review
 from knowledge_library.bill_amounts import search_amount,query_amount
 from knowledge_library.search_response import respond
-from research.patent_candidate.measure_ocr_search_chain import make_scan
 
 ROOT=Path(__file__).resolve().parents[1]
+
+
+def make_scan(path,*,current_right=None):
+    with pymupdf.open() as source:
+        page=source.new_page(width=600,height=420)
+        page.insert_text((35,35),'SYNTHETIC INVOICE - NOT A REAL BILL',fontsize=12)
+        labels=[(325,'Current Invoice')] if current_right is None else [
+            (265,'Previous Invoice' if current_right else 'Current Invoice'),
+            (445,'Current Invoice' if current_right else 'Previous Invoice')]
+        for center,text in labels:
+            width=pymupdf.get_text_length(text,fontsize=16)
+            page.insert_text((center-width/2,90),text,fontsize=16)
+        page.insert_text((60,320),'Grand Total:',fontsize=16)
+        if current_right is None:page.insert_text((290,320),'29074.00',fontsize=16)
+        else:
+            page.insert_text((230,320),'29000.00' if current_right else '29074.00',fontsize=16)
+            page.insert_text((410,320),'29074.00' if current_right else '29000.00',fontsize=16)
+        pix=page.get_pixmap(matrix=pymupdf.Matrix(300/72,300/72))
+        with pymupdf.open() as scan:
+            out=scan.new_page(width=600,height=420)
+            out.insert_image(out.rect,stream=pix.tobytes('png'));scan.save(path)
+
+
+def make_faint_header_scan(path):
+    with pymupdf.open() as source:
+        page=source.new_page(width=600,height=420)
+        page.insert_text((35,35),'SYNTHETIC SCAN - NOT A REAL BILL',fontsize=12)
+        for center,current in ((265,False),(445,True)):
+            text='Current Invoice' if current else 'Previous Invoice'
+            size=4; width=pymupdf.get_text_length(text,fontsize=size)
+            page.insert_text((center-width/2,90),text,fontsize=size,
+                             color=(.85,.85,.85))
+        page.insert_text((60,320),'Grand Total:',fontsize=16)
+        page.insert_text((230,320),'250.00',fontsize=16)
+        page.insert_text((410,320),'10500.00',fontsize=16)
+        pix=page.get_pixmap(matrix=pymupdf.Matrix(300/72,300/72))
+        with pymupdf.open() as scanned:
+            target=scanned.new_page(width=600,height=420)
+            target.insert_image(target.rect,stream=pix.tobytes('png'))
+            scanned.save(path)
 
 
 class CountingEncoder:
@@ -137,8 +176,7 @@ def test_source_decode_admission_retains_needs_review(tmp_path):
 
 
 def test_optional_audit_is_bounded_and_does_not_certify_completeness(tmp_path):
-    from research.patent_candidate.measure_ink_coverage import make_scan as tiny_scan
-    path=tmp_path/'tiny.pdf';tiny_scan(path,gray=True)
+    path=tmp_path/'tiny.pdf';make_faint_header_scan(path)
     with pymupdf.open(path) as pdf:
         r=extract_page(pdf[0],PdfOptions(ocr=True,tables=False,audit_ocr=True,ocr_retry_limit=2,tessdata=str(ROOT/'models/tessdata')))
     record=r['evidence']['coverage']

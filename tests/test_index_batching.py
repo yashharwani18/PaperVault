@@ -4,7 +4,7 @@ import pytest
 
 from knowledge_library.library import Library
 from knowledge_library.pdf import PdfOptions
-from tests.test_research_implementation import CountingEncoder
+from tests.test_pdf_search_regressions import CountingEncoder
 
 
 def write_pages(path, version):
