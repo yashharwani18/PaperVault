@@ -30,7 +30,8 @@ internal static class Program
         string root = AppDomain.CurrentDomain.BaseDirectory;
         bool release = File.Exists(Path.Combine(root, "release.json"));
         string library = release ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LocalKnowledgeLibrary", "library") : Path.Combine(root, "data", "library");
-        string localConfig = Path.Combine(root, "Library.user.json");
+        string localConfig = Path.Combine(root, "PaperVault.user.json");
+        if (!File.Exists(localConfig)) localConfig = Path.Combine(root, "Library.user.json");
         if (File.Exists(localConfig))
         {
             try { library = new JavaScriptSerializer().Deserialize<Config>(File.ReadAllText(localConfig)).library_path ?? library; }
