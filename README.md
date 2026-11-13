@@ -38,8 +38,12 @@ Unlike tools that force you to manually curate folders or drag-and-drop files on
 ### Engineering highlights
 
 * **“Show me the 2.6k bill” finds the ₹2,614 invoice.** PaperVault expands `2.6k` to `2600` and looks for invoice totals within a small tolerance. It shows ₹2,614 as a nearby match, reports the ₹14 difference, and links to the original PDF page so you can check the amount. Add “exactly” to search for the exact amount.
+* **Read the layout of scanned invoices.** When a scan has separate “Current Invoice” and “Previous Invoice” columns, PaperVault uses the positions of the headers and amounts to associate the total with the right column. If the layout is ambiguous, it marks the association as unresolved. A review is tied to the exact field on that version of the PDF, so a changed source requires a fresh review.
 * **See matches while the full search runs.** On Windows, PaperVault checks exact filenames first. For general content searches, a fast keyword lookup can show matching passages while the full search runs. These previews prioritize PDFs, then Word documents, spreadsheets such as CSV and XLSX, and slides such as PPTX. The full search ranks results by relevance.
+* **Rank pages as well as passages.** Hybrid search combines SQLite keyword ranks and embedding ranks with reciprocal rank fusion. Each ranking contributes at most one passage per page, so a page with many matching chunks gets one vote per ranking.
+* **Keep search responsive during indexing.** On Windows, the background indexing worker yields to active searches at page and embedding batch checkpoints. Imports are staged before committing to SQLite, so an interrupted update can leave the previous searchable version intact.
 * **Reuse embeddings after a PDF changes.** When PaperVault reindexes an edited PDF, it reuses embeddings for passages whose inputs and model settings still match. It computes new vectors only for passages that need them.
+* **Reconnect a moved file without reindexing.** When you point PaperVault to a moved original, it compares the file’s SHA-256 hash with the hash saved during indexing. If the contents match, it updates the source path and keeps the existing index and embeddings.
 
 ---
 
