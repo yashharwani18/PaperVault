@@ -105,7 +105,7 @@ def evaluate(snapshot,output):
     simplicity={'original_only':0,'build21':1,'combined_pages':2}
     selected=min(METHODS,key=lambda m:(-dev[m]['recall@3'],-dev[m]['recall@5'],-dev[m]['mrr@5'],simplicity.get(m,3),METHODS.index(m)))
     lock={'selected':selected,'development':dev,'snapshot_sha256':hashlib.sha256(snapshot.read_bytes()).hexdigest(),
-          'protocol_sha256':hashlib.sha256((ROOT/'docs/superpowers/specs/2026-10-28-offline-retrieval-upgrade.md').read_bytes()).hexdigest(),
+          'protocol_sha256':hashlib.sha256((ROOT/'evaluation/ANDROID_RETRIEVAL_PROTOCOL.md').read_bytes()).hexdigest(),
           'selection':'Development queries only; written before test metrics are computed.'}
     (output/'selection-lock.json').write_text(json.dumps(lock,indent=2),encoding='utf-8')
     test={m:metrics(queries,rankings,chunks,m,'test') for m in METHODS}

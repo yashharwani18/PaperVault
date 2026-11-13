@@ -163,6 +163,8 @@ Any modern 64-bit Windows PC. An NVIDIA GPU with 4+ GB VRAM delivers lightning-f
 
 PaperVault is free and open source under the **Apache License 2.0**. If PaperVault helps you find what you need and you want to support development, consider giving the repository a star on GitHub!
 
+[Bill search guide](BILLS_GUIDE.md) · [Build the Android app](android/README.md) · [Export Android embeddings](docs/android-embedding-export.md)
+
 ---
 
 ## Thanks & Open Source

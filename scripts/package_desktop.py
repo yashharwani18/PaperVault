@@ -15,7 +15,7 @@ def main():
     files=[]
     for directory in roots:
         files.extend(p for p in (ROOT/directory).rglob('*') if p.is_file() and '__pycache__' not in p.parts)
-    for name in ['model-lock.json','qwen-lock.json','requirements.lock.txt','requirements.in','README.md','BILLS_GUIDE.md','USAGE_PILOT.md','results/UPGRADE_REPORT.md','Setup-Library.cmd','Start-Library.cmd','Stop-Library.cmd','Start-Demo.cmd','Stop-Demo.cmd','Test-Offline.cmd','evaluation/confidence-policy.json',
+    for name in ['model-lock.json','qwen-lock.json','requirements.lock.txt','requirements.in','README.md','BILLS_GUIDE.md','android/README.md','docs/android-embedding-export.md','docs/papervault-search.gif','LICENSE','Setup-Library.cmd','Start-Library.cmd','Stop-Library.cmd','Start-Demo.cmd','Stop-Demo.cmd','Test-Offline.cmd','evaluation/confidence-policy.json',
                  'scripts/prepare_demo_paths.py','scripts/convert_presentation.ps1','scripts/setup_qwen.py','scripts/prime_encoder_cache.py',
                  'scripts/setup_desktop.ps1','scripts/setup.ps1','scripts/prepare_model.py','scripts/start_desktop.ps1','scripts/stop_desktop.ps1','scripts/test_physical_offline.ps1']:
         files.append(ROOT/name)

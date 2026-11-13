@@ -45,7 +45,7 @@ def main():
     output=ROOT/'.cache/rag-quality/assets/retrieval-benchmark';output.mkdir(parents=True,exist_ok=True)
     path=output/'corpus.json';path.write_text(json.dumps(snapshot,ensure_ascii=False),encoding='utf-8')
     protocol={'source_documents':len(documents),'source_pages':sum(len(d['pages']) for d in documents),'queries':len(queries),'corpus_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
-              'labels_sha256':hashlib.sha256((ROOT/'evaluation/phase3-queries.json').read_bytes()).hexdigest(),'hindi_ids':list(HINDI),'spec':'docs/superpowers/specs/2026-10-28-offline-retrieval-upgrade.md'}
+              'labels_sha256':hashlib.sha256((ROOT/'evaluation/phase3-queries.json').read_bytes()).hexdigest(),'hindi_ids':list(HINDI),'spec':'evaluation/ANDROID_RETRIEVAL_PROTOCOL.md'}
     out=ROOT/'results/retrieval-upgrade';out.mkdir(parents=True,exist_ok=True);(out/'protocol.json').write_text(json.dumps(protocol,indent=2),encoding='utf-8')
     print(json.dumps(protocol,indent=2))
 

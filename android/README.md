@@ -1,16 +1,15 @@
-# Standalone offline Android preview
+# PaperVault for Android
 
-Built locally on 22 October 2026. The APK contains the UI, native processing libraries, bundled Latin-script OCR, Qwen3 0.6B Q4_K_M and the EmbeddingGemma 2 Q8_0 text encoder. It does not connect to the PC backend or download models at runtime. The merged application manifest removes INTERNET permission.
+The Android preview runs indexing and search on the phone. The full APK bundles the models and OCR data. Initial indexing can take a long time on a phone. [Install the Android preview](../README.md#android-preview)
 
-The installable development APK is copied to `output/Local-Library-offline.apk`. It is a private testing build, signed with the project’s local development key in `android/signing/`, which must be retained for compatible updates. The key and build/model caches are ignored by version control.
+The build script writes the full APK to `output/Khoj-0.5.0-android.apk`. The signing key in `android/signing/` is needed to build an update that Android will accept over an existing installation. A separately signed build needs a fresh installation.
 
 ## Phone support and behavior
 
 - Android 8.0/API 26 or newer, ARM64. The universal development build also includes an AVX2 x86-64 library for the test emulator. A current Android System WebView is needed for the shared UI/PDF viewer.
-- The user’s 8 GB RAM phone is the intended hardware target. Functional tests run in an Android 15 x86-64 emulator; this is not a physical-phone performance or battery qualification.
-- Models total about 794 MB. They are copied and checksum-verified in app-private storage on first launch. Allow at least about 3 GB of free space for the APK, installed assets and working copies; documents need additional space.
+- On first launch, PaperVault copies the models to app storage and verifies their checksums. Allow about 3 GB free for the APK, installed assets, and working copies, plus space for your documents.
 - One native model is resident at a time. Inference uses CPU, up to four available threads, bounded contexts and execution deadlines. Imports can be paused or restricted to charging. Foreground import work has an Android notification; interrupted tasks remain retryable.
-- PDF and PPTX files are selected through Android’s system picker, including recursively selected folders. No broad storage permission is used. Imports accept up to 500 files, 100 MB each, with page/archive/work limits.
+- Use Android’s file picker to select PDFs, PPTX files, or folders. The optional whole-phone PDF scan requests all-files access. Imports accept up to 500 files, 100 MB each.
 - PPTX imports text and table text in presentation order. Its PDF preview is explicitly a text preview, not a reproduction of original slide layout. Images/charts require checking the retained original deck. Legacy `.ppt` must be exported to `.pptx` or PDF.
 - Scanned PDFs use bundled ML Kit Latin-script OCR. Recognition and field association remain reviewable. The observed `lnvoice` OCR spelling is an explicit label cue, never a digit correction; original text and coordinates are retained.
 - Search supports local embeddings, constrained Qwen interpretation/source navigation, exact or nearby amounts, saved bill filters, review scope and source-page citations. Quantized mobile vectors have their own model/input identity; PC vectors/calibration are not silently reused.
@@ -25,12 +24,6 @@ The installable development APK is copied to `output/Local-Library-offline.apk`.
 
 The build requires public dependency downloads; app use is offline. Source code and user documents are not sent to an online build service. Model identities are also recorded in the APK’s `offline-models.json` and `NOTICE.txt`.
 
-## Validation artifacts
+## Tests
 
-- 13 JVM parsing/layout tests passed; 3 Android integration tests passed, including real bundled models, OCR, search and authenticated backup rejection. Native PDF rendering and system file-picker import also passed. The home screen was visually checked at Android font scale 1.3.
-- JVM parsing/layout tests: `android/app/build/test-results/testDebugUnitTest/`.
-- Emulator integration tests: `android/app/src/androidTest/`, `results/android-instrumentation.log`.
-- Emulator screenshots and UI checks: `results/android-qa/`.
-- Build log: `results/android-build.log`.
-
-All test invoices and the test presentation are synthetic. The user’s deleted Pawan Bills folder is not used or packaged.
+Run JVM tests with `python scripts/build_android.py testDebugUnitTest`. Device and emulator tests live in [app/src/androidTest](app/src/androidTest).

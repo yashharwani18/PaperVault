@@ -11,7 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def node_binary():
-    """Workspace node: PATH first, then the runtime documented in docs/HANDOFF.md."""
+    """Use Node from PATH, with a fallback to the bundled workspace runtime."""
     found=shutil.which('node')
     if found:return found
     bundled=Path.home()/'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin'/('node.exe' if os.name=='nt' else 'node')
@@ -22,7 +22,7 @@ def build_frontend():
     """Rebuild the interface and record its source digest, so the audit can prove what shipped."""
     from audit_android_apk import ui_source_digest
     node=node_binary()
-    if not node:raise RuntimeError('Node.js is required to build the interface. Install Node 24 LTS or follow docs/HANDOFF.md.')
+    if not node:raise RuntimeError('Install Node.js 24 and make it available on PATH before building the interface.')
     cwd=ROOT/'frontend'
     for script in (['copy-pdf-assets.mjs'],['node_modules/typescript/bin/tsc','-b'],['node_modules/vite/bin/vite.js','build']):
         subprocess.run([node,*script],cwd=cwd,check=True)
