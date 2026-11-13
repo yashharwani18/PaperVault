@@ -2,7 +2,7 @@
 
 > **I'm Yash, and I'm looking for work.** I built PaperVault because I wanted to find things on my PC even when I couldn't remember the filename. If this project makes you think I'd be a good fit for your team, I'd love to hear from you. I'm open to jobs, internships, research roles, and collaborations in AI or software. A referral or an introduction would mean a lot, too.
 >
-> **[Message me on LinkedIn](https://www.linkedin.com/in/yash-harwani/)** · [GitHub](https://github.com/yashharwani18)
+> **Email me at [yashharwani321@gmail.com](mailto:yashharwani321@gmail.com)** · [LinkedIn](https://www.linkedin.com/in/yash-harwani/) · [GitHub](https://github.com/yashharwani18)
 
 Describe it. Find it across your entire PC.
 
