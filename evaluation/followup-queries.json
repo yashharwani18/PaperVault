@@ -1,0 +1,197 @@
+{
+  "protocol": "Follow-up new questions on previously performance-only RFCs. Fixed current 256-token/768d profile and unchanged cutoff. No tuning on these results.",
+  "annotation": "Source pages checked by coding agent before rankings. Not independent human judgments; positive labels are non-exhaustive.",
+  "library": "C:\\Users\\Yash\\Downloads\\startup idea\\data\\phase4\\cuda-20261017-175438-1400",
+  "questions": [
+    {
+      "id": "rfc-positive-1",
+      "query": "How do the lowest two bits of a QUIC stream identifier tell me its initiator and permitted direction?",
+      "relevant": [
+        {
+          "document_id": "a45c992bd9e341bfbe5074c077a60712",
+          "filename": "rfc-9000.pdf",
+          "page": 13
+        }
+      ],
+      "source_evidence": "Streams can be created by either endpoint, can concurrently send data interleaved with other\nstreams, and can be canceled. QUIC does not provide any means of ensuring ordering between\nbytes on di\ufb00erent streams.\nQUIC allows for an arbitrary number of streams to operate concurrently and for an arbitrary\namount of data to be sent on any stream, subject to \ufb02ow control constraints and stream limits;\nsee Section 4.\n2.1. Stream Types and Identi\ufb01ers \nStreams can be unidirectional or bidirectional. Unidirectional streams carry data in one\ndirection: from the initiator of the stream to its peer. Bidirectional streams allow for data to be\nsent in both directions.\nStreams are identi\ufb01ed within a connection by a numeric value, referred to as the stream ID. A\nstream ID is a 62-bit integer (0 to 262-1) that is unique for all streams on a connection. Stream IDs\nare encoded as variable-length integers; see Section 16. A QUIC endpoint \n reuse a\nstream ID within a connection.\nThe least signi\ufb01cant bit (0x01) of the stream ID identi\ufb01es the initiator of the stream. Client-\ninitiated streams have even-numbered stream IDs (with the bit set to 0), and server-initiated\nstreams have odd-numbered stream IDs (with the bit set to 1).\nThe second least signi\ufb01cant bit (0x02) of the stream ID distinguishes between bidirectional\nstreams (with the bit set to 0) and unidirectional streams (with the bit set to 1).\nThe two least signi\ufb01cant bits from a stream ID therefore identify a stream as one of four types, as\nsummarized in Table 1.\nThe stream space for each type begins at the minimum value (0x00 through 0x03, respectively);\nsuccessive streams of each type are created with numerically increasing stream IDs. A stream ID\nthat is used out of order results in all streams of that type with lower-numbered stream IDs also\nbeing opened.\nMUST NOT\nBits\nStream Type\n0x00\nClient-Initiated, Bidirectional\n0x01\nServer-Initiated, Bidirectional\n0x02\nClient-Initiated, Unidirectional\n0x03\nServer-Initiated, Unidirectional\nTable 1: Stream ID Types \nRFC 9000\nQUIC Transport Protocol\nMay 2021\nIyengar & Thomson\nStandards Track\nPage 13\n",
+      "source_sha256": "24f411581702fea968f554264a629a80aa5a03a2a959733063391575256edcc7"
+    },
+    {
+      "id": "rfc-positive-2",
+      "query": "How does QUIC prevent one stream and a whole connection from exhausting the receiving buffer?",
+      "relevant": [
+        {
+          "document_id": "a45c992bd9e341bfbe5074c077a60712",
+          "filename": "rfc-9000.pdf",
+          "page": 22
+        }
+      ],
+      "source_evidence": "4. Flow Control \nReceivers need to limit the amount of data that they are required to bu\ufb00er, in order to prevent a\nfast sender from overwhelming them or a malicious sender from consuming a large amount of\nmemory. To enable a receiver to limit memory commitments for a connection, streams are \ufb02ow\ncontrolled both individually and across a connection as a whole. A QUIC receiver controls the\nmaximum amount of data the sender can send on a stream as well as across all streams at any\ntime, as described in Sections 4.1 and 4.2.\nSimilarly, to limit concurrency within a connection, a QUIC endpoint controls the maximum\ncumulative number of streams that its peer can initiate, as described in Section 4.6.\nData sent in CRYPTO frames is not \ufb02ow controlled in the same way as stream data. QUIC relies on\nthe cryptographic protocol implementation to avoid excessive bu\ufb00ering of data; see \n.\nTo avoid excessive bu\ufb00ering at multiple layers, QUIC implementations \n provide an\ninterface for the cryptographic protocol implementation to communicate its bu\ufb00ering limits.\n[QUIC-TLS]\nSHOULD\n4.1. Data Flow Control \nQUIC employs a limit-based \ufb02ow control scheme where a receiver advertises the limit of total\nbytes it is prepared to receive on a given stream or for the entire connection. This leads to two\nlevels of data \ufb02ow control in QUIC:\nStream \ufb02ow control, which prevents a single stream from consuming the entire receive\nbu\ufb00er for a connection by limiting the amount of data that can be sent on each stream. \nConnection \ufb02ow control, which prevents senders from exceeding a receiver's bu\ufb00er capacity\nfor the connection by limiting the total bytes of stream data sent in STREAM frames on all\nstreams. \nSenders \n send data in excess of either limit.\nA receiver sets initial limits for all streams through transport parameters during the handshake\n(Section 7.4). Subsequently, a receiver sends MAX_STREAM_DATA frames (Section 19.10) or\nMAX_DATA frames (Section 19.9) to the sender to advertise larger limits.\nA receiver can advertise a larger limit for a stream by sending a MAX_STREAM_DATA frame with\nthe corresponding stream ID. A MAX_STREAM_DATA frame indicates the maximum absolute byte\no\ufb00set of a stream. A receiver could determine the \ufb02ow control o\ufb00set to be advertised based on\nthe current o\ufb00set of data consumed on that stream.\nA receiver can advertise a larger limit for a connection by sending a MAX_DATA frame, which\nindicates the maximum of the sum of the absolute byte o\ufb00sets of all streams. A receiver\nmaintains a cumulative sum of bytes received on all streams, which is used to check for\nviolations of the advertised connection or stream data limits. A receiver could determine the\nmaximum data limit to be advertised based on the sum of bytes consumed on all streams.\n\u2022 \n\u2022 \nMUST NOT\nRFC 9000\nQUIC Transport Protocol\nMay 2021\nIyengar & Thomson\nStandards Track\nPage 22\n",
+      "source_sha256": "24f411581702fea968f554264a629a80aa5a03a2a959733063391575256edcc7"
+    },
+    {
+      "id": "rfc-positive-3",
+      "query": "When a QUIC peer moves to a new path, what happens to congestion control and round-trip estimates?",
+      "relevant": [
+        {
+          "document_id": "a45c992bd9e341bfbe5074c077a60712",
+          "filename": "rfc-9000.pdf",
+          "page": 53
+        }
+      ],
+      "source_evidence": "In response to an apparent migration, endpoints \n validate the previously active path using a\nPATH_CHALLENGE frame. This induces the sending of new packets on that path. If the path is no\nlonger viable, the validation attempt will time out and fail; if the path is viable but no longer\ndesired, the validation will succeed but only results in probing packets being sent on the path.\nAn endpoint that receives a PATH_CHALLENGE on an active path \n send a non-probing\npacket in response. If the non-probing packet arrives before any copy made by an attacker, this\nresults in the connection being migrated back to the original path. Any subsequent migration to\nanother path restarts this entire process.\nThis defense is imperfect, but this is not considered a serious problem. If the path via the attack\nis reliably faster than the original path despite multiple attempts to use that original path, it is\nnot possible to distinguish between an attack and an improvement in routing.\nAn endpoint could also use heuristics to improve detection of this style of attack. For instance,\nNAT rebinding is improbable if packets were recently received on the old path; similarly,\nrebinding is rare on IPv6 paths. Endpoints can also look for duplicated packets. Conversely, a\nchange in connection ID is more likely to indicate an intentional migration rather than an attack.\nMUST\nSHOULD\n9.4. Loss Detection and Congestion Control \nThe capacity available on the new path might not be the same as the old path. Packets sent on the\nold path \n contribute to congestion control or RTT estimation for the new path.\nOn con\ufb01rming a peer's ownership of its new address, an endpoint \n immediately reset the\ncongestion controller and round-trip time estimator for the new path to initial values (see\nAppendices A.3 and B.3 of \n) unless the only change in the peer's address is its\nport number. Because port-only changes are commonly the result of NAT rebinding or other\nmiddlebox activity, the endpoint \n instead retain its congestion control state and round-trip\nestimate in those cases instead of reverting to initial values. In cases where congestion control\nstate retained from an old path is used on a new path with substantially di\ufb00erent characteristics,\na sender could transmit too aggressively until the congestion controller and the RTT estimator\nhave adapted. Generally, implementations are advised to be cautious when using previous values\non a new path.\nThere could be apparent reordering at the receiver when an endpoint sends data and probes\nfrom/to multiple addresses during the migration period, since the two resulting paths could have\ndi\ufb00erent round-trip times. A receiver of packets on multiple paths will still send ACK frames\ncovering all received packets.\nWhile multiple paths might be used during connection migration, a single congestion control\ncontext and a single loss recovery context (as described in \n) could be adequate.\nFor instance, an endpoint might delay switching to a new congestion control context until it is\ncon\ufb01rmed that an old path is no longer needed (such as the case described in Section 9.3.3).\nA sender can make exceptions for probe packets so that their loss detection is independent and\ndoes not unduly cause the congestion controller to reduce its sending rate. An endpoint might set\na separate timer when a PATH_CHALLENGE is sent, which is canceled if the corresponding\nMUST NOT\nMUST\n[QUIC-RECOVERY]\nMAY\n[QUIC-RECOVERY]\nRFC 9000\nQUIC Transport Protocol\nMay 2021\nIyengar & Thomson\nStandards Track\nPage 53\n",
+      "source_sha256": "24f411581702fea968f554264a629a80aa5a03a2a959733063391575256edcc7"
+    },
+    {
+      "id": "rfc-positive-4",
+      "query": "Which QUIC integer encodings fit in one, two, four, or eight bytes, and how is the length signaled?",
+      "relevant": [
+        {
+          "document_id": "a45c992bd9e341bfbe5074c077a60712",
+          "filename": "rfc-9000.pdf",
+          "page": 87
+        }
+      ],
+      "source_evidence": "16. Variable-Length Integer Encoding \nQUIC packets and frames commonly use a variable-length encoding for non-negative integer\nvalues. This encoding ensures that smaller integer values need fewer bytes to encode.\nThe QUIC variable-length integer encoding reserves the two most signi\ufb01cant bits of the \ufb01rst byte\nto encode the base-2 logarithm of the integer encoding length in bytes. The integer value is\nencoded on the remaining bits, in network byte order.\nThis means that integers are encoded on 1, 2, 4, or 8 bytes and can encode 6-, 14-, 30-, or 62-bit\nvalues, respectively. Table 4 summarizes the encoding properties.\nAn example of a decoding algorithm and sample encodings are shown in Appendix A.1.\nValues do not need to be encoded on the minimum number of bytes necessary, with the sole\nexception of the Frame Type \ufb01eld; see Section 12.4.\nVersions (Section 15), packet numbers sent in the header (Section 17.1), and the length of\nconnection IDs in long header packets (Section 17.2) are described using integers but do not use\nthis encoding.\n2MSB\nLength\nUsable Bits\nRange\n00\n1\n6\n0-63\n01\n2\n14\n0-16383\n10\n4\n30\n0-1073741823\n11\n8\n62\n0-4611686018427387903\nTable 4: Summary of Integer Encodings \n17. Packet Formats \nAll numeric values are encoded in network byte order (that is, big endian), and all \ufb01eld sizes are\nin bits. Hexadecimal notation is used for describing the value of \ufb01elds.\n17.1. Packet Number Encoding and Decoding \nPacket numbers are integers in the range 0 to 262-1 (Section 12.3). When present in long or short\npacket headers, they are encoded in 1 to 4 bytes. The number of bits required to represent the\npacket number is reduced by including only the least signi\ufb01cant bits of the packet number.\nThe encoded packet number is protected as described in \n.\nSection 5.4 of [QUIC-TLS]\nRFC 9000\nQUIC Transport Protocol\nMay 2021\nIyengar & Thomson\nStandards Track\nPage 87\n",
+      "source_sha256": "24f411581702fea968f554264a629a80aa5a03a2a959733063391575256edcc7"
+    },
+    {
+      "id": "rfc-positive-5",
+      "query": "Why can early application data in a QUIC zero-round-trip handshake be unsafe to repeat?",
+      "relevant": [
+        {
+          "document_id": "b9822393c6334868ac690a7f0e34db00",
+          "filename": "rfc-9001.pdf",
+          "page": 6
+        }
+      ],
+      "source_evidence": "After completing the TLS handshake, the client will have learned and authenticated an identity\nfor the server, and the server is optionally able to learn and authenticate an identity for the\nclient. TLS supports X.509 \n certi\ufb01cate-based authentication for both server and client.\nWhen PSK key exchange is used (as in resumption), knowledge of the PSK serves to authenticate\nthe peer.\nThe TLS key exchange is resistant to tampering by attackers, and it produces shared secrets that\ncannot be controlled by either participating peer.\nTLS provides two basic handshake modes of interest to QUIC:\nA full 1-RTT handshake, in which the client is able to send application data after one round\ntrip and the server immediately responds after receiving the \ufb01rst handshake message from\nthe client. \nA 0-RTT handshake, in which the client uses information it has previously learned about the\nserver to send application data immediately. This application data can be replayed by an\nattacker, so 0-RTT is not suitable for carrying instructions that might initiate any action that\ncould cause unwanted e\ufb00ects if replayed. \nA simpli\ufb01ed TLS handshake with 0-RTT application data is shown in Figure 2.\nFigure 2 omits the EndOfEarlyData message, which is not used in QUIC; see Section 8.3. Likewise,\nneither ChangeCipherSpec nor KeyUpdate messages are used by QUIC. ChangeCipherSpec is\nredundant in TLS 1.3; see Section 8.4. QUIC has its own key update mechanism; see Section 6.\nData is protected using a number of encryption levels:\nInitial keys \nEarly data (0-RTT) keys \nHandshake keys \n[RFC5280]\n\u2022 \n\u2022 \nFigure 2: TLS Handshake with 0-RTT \n    Client                                             Server\n    ClientHello\n   (0-RTT Application Data)  -------->\n                                                  ServerHello\n                                         {EncryptedExtensions}\n                                                    {Finished}\n                             <--------      [Application Data]\n   {Finished}                -------->\n   [Application Data]        <------->      [Application Data]\n    () Indicates messages protected by Early Data (0-RTT) Keys\n    {} Indicates messages protected using Handshake Keys\n    [] Indicates messages protected using Application Data\n       (1-RTT) Keys\n\u2022 \n\u2022 \n\u2022 \nRFC 9001\nUsing TLS to Secure QUIC\nMay 2021\nThomson & Turner\nStandards Track\nPage 6\n",
+      "source_sha256": "1cbf86bfbde67ed62f841af84edc8009a0bf9b7e5571babeee0b83d1a1211a15"
+    },
+    {
+      "id": "rfc-positive-6",
+      "query": "Which TLS version does the QUIC security specification describe?",
+      "relevant": [
+        {
+          "document_id": "b9822393c6334868ac690a7f0e34db00",
+          "filename": "rfc-9001.pdf",
+          "page": 13
+        }
+      ],
+      "source_evidence": "Figure 5 shows the multiple packets that form a single \"\ufb02ight\" of messages being processed\nindividually, to show what incoming messages trigger di\ufb00erent actions. This shows multiple \"Get\nHandshake\" invocations to retrieve handshake messages at di\ufb00erent encryption levels. New\nhandshake messages are requested after incoming packets have been processed.\nFigure 5 shows one possible structure for a simple handshake exchange. The exact process varies\nbased on the structure of endpoint implementations and the order in which packets arrive.\nImplementations could use a di\ufb00erent number of operations or execute them in other orders.\nFigure 5: Interaction Summary between QUIC and TLS \nClient                                                    Server\n======                                                    ======\nGet Handshake\n                     Initial ------------->\nInstall tx 0-RTT keys\n                     0-RTT - - - - - - - ->\n                                              Handshake Received\n                                                   Get Handshake\n                     <------------- Initial\n                                           Install rx 0-RTT keys\n                                          Install Handshake keys\n                                                   Get Handshake\n                     <----------- Handshake\n                                           Install tx 1-RTT keys\n                     <- - - - - - - - 1-RTT\nHandshake Received (Initial)\nInstall Handshake keys\nHandshake Received (Handshake)\nGet Handshake\n                     Handshake ----------->\nHandshake Complete\nInstall 1-RTT keys\n                     1-RTT - - - - - - - ->\n                                              Handshake Received\n                                              Handshake Complete\n                                             Handshake Confirmed\n                                           Install rx 1-RTT keys\n                     <--------------- 1-RTT\n                           (HANDSHAKE_DONE)\nHandshake Confirmed\n4.2. TLS Version \nThis document describes how TLS 1.3 \n is used with QUIC.\n[TLS13]\nRFC 9001\nUsing TLS to Secure QUIC\nMay 2021\nThomson & Turner\nStandards Track\nPage 13\n",
+      "source_sha256": "1cbf86bfbde67ed62f841af84edc8009a0bf9b7e5571babeee0b83d1a1211a15"
+    },
+    {
+      "id": "rfc-positive-7",
+      "query": "Why does QUIC recommend a minimum congestion window of two packets instead of one?",
+      "relevant": [
+        {
+          "document_id": "bbdc5510f82a4d439439e6bd4f68bb67",
+          "filename": "rfc-9002.pdf",
+          "page": 7
+        }
+      ],
+      "source_evidence": "4.5. More ACK Ranges \nQUIC supports many ACK ranges, as opposed to TCP's three SACK ranges. In high-loss\nenvironments, this speeds recovery, reduces spurious retransmits, and ensures forward progress\nwithout relying on timeouts.\n4.6. Explicit Correction for Delayed Acknowledgments \nQUIC endpoints measure the delay incurred between when a packet is received and when the\ncorresponding acknowledgment is sent, allowing a peer to maintain a more accurate RTT\nestimate; see \n.\nSection 13.2 of [QUIC-TRANSPORT]\n4.7. Probe Timeout Replaces RTO and TLP \nQUIC uses a probe timeout (PTO; see Section 6.2), with a timer based on TCP's retransmission\ntimeout (RTO) computation; see \n. QUIC's PTO includes the peer's maximum expected\nacknowledgment delay instead of using a \ufb01xed minimum timeout.\nSimilar to the RACK-TLP loss detection algorithm for TCP \n, QUIC does not collapse the\ncongestion window when the PTO expires, since a single packet loss at the tail does not indicate\npersistent congestion. Instead, QUIC collapses the congestion window when persistent congestion\nis declared; see Section 7.6. In doing this, QUIC avoids unnecessary congestion window\nreductions, obviating the need for correcting mechanisms such as Forward RTO-Recovery (F-\nRTO) \n. Since QUIC does not collapse the congestion window on a PTO expiration, a QUIC\nsender is not limited from sending more in-\ufb02ight packets after a PTO expiration if it still has\navailable congestion window. This occurs when a sender is application limited and the PTO timer\nexpires. This is more aggressive than TCP's RTO mechanism when application limited, but\nidentical when not application limited.\nQUIC allows probe packets to temporarily exceed the congestion window whenever the timer\nexpires.\n[RFC6298]\n[RFC8985]\n[RFC5682]\n4.8. The Minimum Congestion Window Is Two Packets \nTCP uses a minimum congestion window of one packet. However, loss of that single packet\nmeans that the sender needs to wait for a PTO to recover (Section 6.2), which can be much longer\nthan an RTT. Sending a single ack-eliciting packet also increases the chances of incurring\nadditional latency when a receiver delays its acknowledgment.\nQUIC therefore recommends that the minimum congestion window be two packets. While this\nincreases network load, it is considered safe since the sender will still reduce its sending rate\nexponentially under persistent congestion (Section 6.2).\nRFC 9002\nQUIC Loss Detection\nMay 2021\nIyengar & Swett\nStandards Track\nPage 7\n",
+      "source_sha256": "d01a2adb6a0221ac152d96e2bfe65dc817ef0ee7d2a50c62861414caa3bf8260"
+    },
+    {
+      "id": "rfc-positive-8",
+      "query": "What is the formula for the QUIC probe timeout, including RTT variation and maximum acknowledgment delay?",
+      "relevant": [
+        {
+          "document_id": "bbdc5510f82a4d439439e6bd4f68bb67",
+          "filename": "rfc-9002.pdf",
+          "page": 13
+        }
+      ],
+      "source_evidence": "Implementations \n experiment with absolute thresholds, thresholds from previous\nconnections, adaptive thresholds, or the including of RTT variation. Smaller thresholds reduce\nreordering resilience and increase spurious retransmissions, and larger thresholds increase loss\ndetection delay.\nMAY\n6.2. Probe Timeout \nA Probe Timeout (PTO) triggers the sending of one or two probe datagrams when ack-eliciting\npackets are not acknowledged within the expected period of time or the server may not have\nvalidated the client's address. A PTO enables a connection to recover from loss of tail packets or\nacknowledgments.\nAs with loss detection, the PTO is per packet number space. That is, a PTO value is computed per\npacket number space.\nA PTO timer expiration event does not indicate packet loss and \n cause prior\nunacknowledged packets to be marked as lost. When an acknowledgment is received that newly\nacknowledges packets, loss detection proceeds as dictated by the packet and time threshold\nmechanisms; see Section 6.1.\nThe PTO algorithm used in QUIC implements the reliability functions of Tail Loss Probe \n, RTO \n, and F-RTO algorithms for TCP \n. The timeout computation is\nbased on TCP's RTO period \n.\nMUST NOT\n[RFC8985]\n[RFC5681]\n[RFC5682]\n[RFC6298]\n6.2.1. Computing PTO \nWhen an ack-eliciting packet is transmitted, the sender schedules a timer for the PTO period as\nfollows:\nThe PTO period is the amount of time that a sender ought to wait for an acknowledgment of a\nsent packet. This time period includes the estimated network RTT (smoothed_rtt), the variation in\nthe estimate (4*rttvar), and max_ack_delay, to account for the maximum time by which a\nreceiver might delay sending an acknowledgment.\nWhen the PTO is armed for Initial or Handshake packet number spaces, the max_ack_delay in\nthe PTO period computation is set to 0, since the peer is expected to not delay these packets\nintentionally; see \n.\nThe PTO period \n be at least kGranularity to avoid the timer expiring immediately.\nWhen ack-eliciting packets in multiple packet number spaces are in \ufb02ight, the timer \n be set\nto the earlier value of the Initial and Handshake packet number spaces.\nAn endpoint \n set its PTO timer for the Application Data packet number space until the\nhandshake is con\ufb01rmed. Doing so prevents the endpoint from retransmitting information in\npackets when either the peer does not yet have the keys to process them or the endpoint does not\nPTO = smoothed_rtt + max(4*rttvar, kGranularity) + max_ack_delay\nSection 13.2.1 of [QUIC-TRANSPORT]\nMUST\nMUST\nMUST NOT\nRFC 9002\nQUIC Loss Detection\nMay 2021\nIyengar & Swett\nStandards Track\nPage 13\n",
+      "source_sha256": "d01a2adb6a0221ac152d96e2bfe65dc817ef0ee7d2a50c62861414caa3bf8260"
+    },
+    {
+      "id": "rfc-positive-9",
+      "query": "How does a QUIC NewReno sender grow its congestion window during congestion avoidance?",
+      "relevant": [
+        {
+          "document_id": "bbdc5510f82a4d439439e6bd4f68bb67",
+          "filename": "rfc-9002.pdf",
+          "page": 20
+        }
+      ],
+      "source_evidence": "Implementations \n reduce the congestion window immediately upon entering a recovery\nperiod or use other mechanisms, such as Proportional Rate Reduction \n, to reduce the\ncongestion window more gradually. If the congestion window is reduced immediately, a single\npacket can be sent prior to reduction. This speeds up loss recovery if the data in the lost packet is\nretransmitted and is similar to TCP as described in \n.\nThe recovery period aims to limit congestion window reduction to once per round trip.\nTherefore, during a recovery period, the congestion window does not change in response to new\nlosses or increases in the ECN-CE count.\nA recovery period ends and the sender enters congestion avoidance when a packet sent during\nthe recovery period is acknowledged. This is slightly di\ufb00erent from TCP's de\ufb01nition of recovery,\nwhich ends when the lost segment that started recovery is acknowledged \n.\nMAY\n[PRR]\nSection 5 of [RFC6675]\n[RFC5681]\n7.3.3. Congestion Avoidance \nA NewReno sender is in congestion avoidance any time the congestion window is at or above the\nslow start threshold and not in a recovery period.\nA sender in congestion avoidance uses an Additive Increase Multiplicative Decrease (AIMD)\napproach that \n limit the increase to the congestion window to at most one maximum\ndatagram size for each congestion window that is acknowledged.\nThe sender exits congestion avoidance and enters a recovery period when a packet is lost or\nwhen the ECN-CE count reported by its peer increases.\nMUST\n7.4. Ignoring Loss of Undecryptable Packets \nDuring the handshake, some packet protection keys might not be available when a packet\narrives, and the receiver can choose to drop the packet. In particular, Handshake and 0-RTT\npackets cannot be processed until the Initial packets arrive, and 1-RTT packets cannot be\nprocessed until the handshake completes. Endpoints \n ignore the loss of Handshake, 0-RTT,\nand 1-RTT packets that might have arrived before the peer had packet protection keys to process\nthose packets. Endpoints \n ignore the loss of packets that were sent after the earliest\nacknowledged packet in a given packet number space.\nMAY\nMUST NOT\n7.5. Probe Timeout \nProbe packets \n be blocked by the congestion controller. A sender \n however count\nthese packets as being additionally in \ufb02ight, since these packets add network load without\nestablishing packet loss. Note that sending probe packets might cause the sender's bytes in \ufb02ight\nto exceed the congestion window until an acknowledgment is received that establishes loss or\ndelivery of packets.\nMUST NOT\nMUST\n7.6. Persistent Congestion \nWhen a sender establishes loss of all packets sent over a long enough duration, the network is\nconsidered to be experiencing persistent congestion.\nRFC 9002\nQUIC Loss Detection\nMay 2021\nIyengar & Swett\nStandards Track\nPage 20\n",
+      "source_sha256": "d01a2adb6a0221ac152d96e2bfe65dc817ef0ee7d2a50c62861414caa3bf8260"
+    },
+    {
+      "id": "rfc-positive-10",
+      "query": "What duration and threshold are used to establish persistent congestion in QUIC?",
+      "relevant": [
+        {
+          "document_id": "bbdc5510f82a4d439439e6bd4f68bb67",
+          "filename": "rfc-9002.pdf",
+          "page": 21
+        }
+      ],
+      "source_evidence": "7.6.1. Duration \nThe persistent congestion duration is computed as follows:\nUnlike the PTO computation in Section 6.2, this duration includes the max_ack_delay irrespective\nof the packet number spaces in which losses are established.\nThis duration allows a sender to send as many packets before establishing persistent congestion,\nincluding some in response to PTO expiration, as TCP does with Tail Loss Probes \n and\nan RTO \n.\nLarger values of kPersistentCongestionThreshold cause the sender to become less responsive to\npersistent congestion in the network, which can result in aggressive sending into a congested\nnetwork. Too small a value can result in a sender declaring persistent congestion unnecessarily,\nresulting in reduced throughput for the sender.\nThe \n value for kPersistentCongestionThreshold is 3, which results in behavior\nthat is approximately equivalent to a TCP sender declaring an RTO after two TLPs.\nThis design does not use consecutive PTO events to establish persistent congestion, since\napplication patterns impact PTO expiration. For example, a sender that sends small amounts of\ndata with silence periods between them restarts the PTO timer every time it sends, potentially\npreventing the PTO timer from expiring for a long period of time, even when no\nacknowledgments are being received. The use of a duration enables a sender to establish\npersistent congestion without depending on PTO expiration.\n(smoothed_rtt + max(4*rttvar, kGranularity) + max_ack_delay) *\n    kPersistentCongestionThreshold\n[RFC8985]\n[RFC5681]\nRECOMMENDED\n7.6.2. Establishing Persistent Congestion \nA sender establishes persistent congestion after the receipt of an acknowledgment if two packets\nthat are ack-eliciting are declared lost, and:\nacross all packet number spaces, none of the packets sent between the send times of these\ntwo packets are acknowledged; \nthe duration between the send times of these two packets exceeds the persistent congestion\nduration (Section 7.6.1); and \na prior RTT sample existed when these two packets were sent. \nThese two packets \n be ack-eliciting, since a receiver is required to acknowledge only ack-\neliciting packets within its maximum acknowledgment delay; see \n.\n\u2022 \n\u2022 \n\u2022 \nMUST\nSection 13.2 of [QUIC-\nTRANSPORT]\nRFC 9002\nQUIC Loss Detection\nMay 2021\nIyengar & Swett\nStandards Track\nPage 21\n",
+      "source_sha256": "d01a2adb6a0221ac152d96e2bfe65dc817ef0ee7d2a50c62861414caa3bf8260"
+    },
+    {
+      "id": "rfc-missing-1",
+      "query": "What was the measured QUIC packet loss percentage on our Jaipur warehouse network on 25 September 2026?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    },
+    {
+      "id": "rfc-missing-2",
+      "query": "What private TLS key does our production QUIC server currently use?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    },
+    {
+      "id": "rfc-missing-3",
+      "query": "What probe timeout did our router actually log at 14:32 on 25 September 2026?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    },
+    {
+      "id": "rfc-missing-4",
+      "query": "What is the negotiated stream ID for the confidential ACME deployment session XZ-987654?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    },
+    {
+      "id": "rfc-missing-5",
+      "query": "Which engineer approved our company migration to QUIC on 12 October 2026?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    },
+    {
+      "id": "rfc-missing-6",
+      "query": "How much did our company pay its TLS certificate supplier in September 2026?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    },
+    {
+      "id": "rfc-missing-7",
+      "query": "What is the customer password for the internal QUIC dashboard account ZETA-771122?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    },
+    {
+      "id": "rfc-missing-8",
+      "query": "How many mobile devices at our private Nashik branch suffered persistent congestion last Friday?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    },
+    {
+      "id": "rfc-missing-9",
+      "query": "What exact GPU memory use did our unrecorded QUIC benchmark experiment QX-554433 produce?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    },
+    {
+      "id": "rfc-missing-10",
+      "query": "What date did our fictional customer BT-000099 sign its private transport agreement?",
+      "relevant": [],
+      "reason": "Requests private deployment facts or secrets absent from this public standards corpus"
+    }
+  ]
+}

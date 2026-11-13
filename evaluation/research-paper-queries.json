@@ -1,0 +1,357 @@
+{
+  "judgment_provenance": "Agent-authored from direct inspection of these PDF originals before scoring; not independent human judgments.",
+  "judgment_scope": "Non-exhaustive page labels. A miss means no labeled page was in the cutoff; unlabeled pages may also be relevant. Small ML-only corpus, native-text PDFs, English queries; no claim of general accuracy.",
+  "queries": [
+    {
+      "id": "tr-heads",
+      "query": "How many parallel attention heads does the original Transformer use?",
+      "relevant": [
+        {
+          "document": "transformer",
+          "page": 5,
+          "anchor": "h = 8 parallel attention",
+          "page_text_sha256": "6c646a9455efabad949fc8681f1e12849e724db7c68998d95e634da50c0750c2"
+        }
+      ]
+    },
+    {
+      "id": "tr-position",
+      "query": "How does the Transformer represent token order without recurrence?",
+      "relevant": [
+        {
+          "document": "transformer",
+          "page": 6,
+          "anchor": "sine and cosine functions",
+          "page_text_sha256": "81cc73ee227501602bcef92d8dfc1fb430d305dc0b996975a3ba4690a6dc5f7c"
+        }
+      ]
+    },
+    {
+      "id": "tr-scale",
+      "query": "Why does scaled dot product attention divide scores by the square root of the key dimension?",
+      "relevant": [
+        {
+          "document": "transformer",
+          "page": 4,
+          "anchor": "extremely small gradients",
+          "page_text_sha256": "20a20acaa522eb1f39b5a8b953bc6b8cb47d9453992bcf913935956377641a0c"
+        }
+      ]
+    },
+    {
+      "id": "tr-score",
+      "query": "What English to German translation BLEU score did the Transformer report?",
+      "relevant": [
+        {
+          "document": "transformer",
+          "page": 1,
+          "anchor": "28.4 BLEU",
+          "page_text_sha256": "b1e09e47fbcbbfce3602b9965077fc6445a2cd6f60d611afea2b99c4e4bebe7a"
+        },
+        {
+          "document": "transformer",
+          "page": 8,
+          "anchor": "28.4",
+          "page_text_sha256": "ac003228438501758647c79a5f2e948c50841a63af14a2cf648448b2d7069657"
+        }
+      ]
+    },
+    {
+      "id": "bert-vocab",
+      "query": "What vocabulary and subword tokenization does BERT use?",
+      "relevant": [
+        {
+          "document": "bert",
+          "page": 4,
+          "anchor": "30,000 token vocabulary",
+          "page_text_sha256": "f6d1c7fba23083c149271c55d6d9729cfdae481a6140297c199c956022c98e04"
+        }
+      ]
+    },
+    {
+      "id": "bert-corpus",
+      "query": "Which text collections and word counts were used to pretrain BERT?",
+      "relevant": [
+        {
+          "document": "bert",
+          "page": 5,
+          "anchor": "BooksCorpus (800M words)",
+          "page_text_sha256": "0e496b93685bac5ba785e0b65a7f1afa02902146ca30dadfad7c137e726fec12"
+        }
+      ]
+    },
+    {
+      "id": "bert-mask",
+      "query": "What percentage of tokens are selected for masked language model prediction in BERT?",
+      "relevant": [
+        {
+          "document": "bert",
+          "page": 4,
+          "anchor": "15% of all WordPiece",
+          "page_text_sha256": "f6d1c7fba23083c149271c55d6d9729cfdae481a6140297c199c956022c98e04"
+        }
+      ]
+    },
+    {
+      "id": "bert-nsp",
+      "query": "How are positive and negative next sentence prediction examples constructed for BERT?",
+      "relevant": [
+        {
+          "document": "bert",
+          "page": 4,
+          "anchor": "50% of the time",
+          "page_text_sha256": "f6d1c7fba23083c149271c55d6d9729cfdae481a6140297c199c956022c98e04"
+        }
+      ]
+    },
+    {
+      "id": "rag-frozen",
+      "query": "Which parts of RAG are updated during training and why is the document encoder frozen?",
+      "relevant": [
+        {
+          "document": "rag",
+          "page": 4,
+          "anchor": "keep the document encoder",
+          "page_text_sha256": "82bc74baad6061c6f5d9c566ef6c7e97b5b7d2fb2567ee700da191a242d30b3b"
+        }
+      ]
+    },
+    {
+      "id": "rag-variants",
+      "query": "How do RAG Sequence and RAG Token differ in their use of retrieved documents?",
+      "relevant": [
+        {
+          "document": "rag",
+          "page": 3,
+          "anchor": "same retrieved document",
+          "page_text_sha256": "c2a7d84da5ce58fac0d434b13d79f8530fe15b8f383649efa6b37fbcf2a95f83"
+        }
+      ]
+    },
+    {
+      "id": "rag-index",
+      "query": "How many Wikipedia chunks are in the RAG index and how long is each chunk?",
+      "relevant": [
+        {
+          "document": "rag",
+          "page": 4,
+          "anchor": "21M documents",
+          "page_text_sha256": "82bc74baad6061c6f5d9c566ef6c7e97b5b7d2fb2567ee700da191a242d30b3b"
+        }
+      ]
+    },
+    {
+      "id": "rag-generator",
+      "query": "Which pretrained generator is used by the original retrieval augmented generation model?",
+      "relevant": [
+        {
+          "document": "rag",
+          "page": 3,
+          "anchor": "BART-large",
+          "page_text_sha256": "c2a7d84da5ce58fac0d434b13d79f8530fe15b8f383649efa6b37fbcf2a95f83"
+        }
+      ]
+    },
+    {
+      "id": "res-degradation",
+      "query": "Why can adding more layers to a plain neural network increase training error?",
+      "relevant": [
+        {
+          "document": "resnet",
+          "page": 1,
+          "anchor": "degradation",
+          "page_text_sha256": "d6e0d34f51e02db600c73922aa4796d5dc99ec11b5d270f0dc9edfa3233e9fd3"
+        },
+        {
+          "document": "resnet",
+          "page": 2,
+          "anchor": "degradation",
+          "page_text_sha256": "03311e7b4e70c45ad1c70b08bdefb2b4be7747e7920f1ecd87c832bfd060f375"
+        }
+      ]
+    },
+    {
+      "id": "res-shortcut",
+      "query": "What function do shortcut connections add to the output of a residual block?",
+      "relevant": [
+        {
+          "document": "resnet",
+          "page": 3,
+          "anchor": "identity mapping",
+          "page_text_sha256": "afe0dfccc312923c18f9dbeae7fb268a0d92b3166eb9e7d0055eb1af5f7ca0a2"
+        }
+      ]
+    },
+    {
+      "id": "res-bottleneck",
+      "query": "What sequence of convolutions is used in the residual bottleneck design?",
+      "relevant": [
+        {
+          "document": "resnet",
+          "page": 6,
+          "anchor": "bottleneck",
+          "page_text_sha256": "610cd954b2e073ea684d43d53366d22f40f2c5d7c7d7abf0e78e74b919d2e56c"
+        },
+        {
+          "document": "resnet",
+          "page": 7,
+          "anchor": "bottleneck",
+          "page_text_sha256": "3b00ebb55097058f3d6aec56d48f55617132593c04ea52bb27fa66e7a5ac2bde"
+        }
+      ]
+    },
+    {
+      "id": "res-ensemble",
+      "query": "What top five ImageNet test error did the ResNet ensemble achieve?",
+      "relevant": [
+        {
+          "document": "resnet",
+          "page": 1,
+          "anchor": "3.57%",
+          "page_text_sha256": "d6e0d34f51e02db600c73922aa4796d5dc99ec11b5d270f0dc9edfa3233e9fd3"
+        },
+        {
+          "document": "resnet",
+          "page": 6,
+          "anchor": "3.57",
+          "page_text_sha256": "610cd954b2e073ea684d43d53366d22f40f2c5d7c7d7abf0e78e74b919d2e56c"
+        }
+      ]
+    },
+    {
+      "id": "adam-default",
+      "query": "What default learning rate and moment decay values does Adam recommend?",
+      "relevant": [
+        {
+          "document": "adam",
+          "page": 2,
+          "anchor": "0.001",
+          "page_text_sha256": "c3b36a7d695d6085f83f85b571b8f77a1c4a2fc19bf5bccc07401f89888cc913"
+        }
+      ]
+    },
+    {
+      "id": "adam-bias",
+      "query": "Why does Adam correct the bias of its moment estimates at the start of training?",
+      "relevant": [
+        {
+          "document": "adam",
+          "page": 2,
+          "anchor": "initialized as",
+          "page_text_sha256": "c3b36a7d695d6085f83f85b571b8f77a1c4a2fc19bf5bccc07401f89888cc913"
+        },
+        {
+          "document": "adam",
+          "page": 3,
+          "anchor": "initialization bias",
+          "page_text_sha256": "ef116a074a374ebfc1d4ab5941f63752a8e38007c54db8e6551a477b16dc5b82"
+        }
+      ]
+    },
+    {
+      "id": "adam-rms",
+      "query": "How does Adam differ from RMSProp with momentum?",
+      "relevant": [
+        {
+          "document": "adam",
+          "page": 5,
+          "anchor": "RMSProp with momentum",
+          "page_text_sha256": "7d897d0e15d27397c26a5f96804dd4c2e42461ee67b7d5fb2946463829f3b6ee"
+        }
+      ]
+    },
+    {
+      "id": "adam-max",
+      "query": "What is AdaMax and which norm is its update rule based on?",
+      "relevant": [
+        {
+          "document": "adam",
+          "page": 1,
+          "anchor": "infinity norm",
+          "page_text_sha256": "de970dc769a0fcfa386d24d7ce9c11545b198b93a0093e084cf1a95cb0f73142"
+        },
+        {
+          "document": "adam",
+          "page": 8,
+          "anchor": "7.1 ADAMAX",
+          "page_text_sha256": "3364c29bead7db26bc1290cd666aef122fae6dbc2165bc76ee2d1c3ba76ba017"
+        },
+        {
+          "document": "adam",
+          "page": 9,
+          "anchor": "infinity norm",
+          "page_text_sha256": "8f56ed34627b8b5cbcaf6a46b6d16cd5b9726b530c0a9d4d61bf3b84bd2e328e"
+        }
+      ]
+    },
+    {
+      "id": "w2v-analogy",
+      "query": "How can word vectors express the relationship between king man woman and queen?",
+      "relevant": [
+        {
+          "document": "word2vec",
+          "page": 2,
+          "anchor": "Queen",
+          "page_text_sha256": "1f30f762bbc086f58a2751cc2fe38fc57317a07816c9029feed3622daa10282f"
+        }
+      ]
+    },
+    {
+      "id": "w2v-cbow",
+      "query": "How do CBOW and Skip gram differ in which word they predict?",
+      "relevant": [
+        {
+          "document": "word2vec",
+          "page": 4,
+          "anchor": "predicting the current word",
+          "page_text_sha256": "f75c9797e872805bbd516aed2e3aa3a30e7a158ddd8d731a36a5489b5bee5689"
+        },
+        {
+          "document": "word2vec",
+          "page": 5,
+          "anchor": "predicts surrounding words",
+          "page_text_sha256": "ecc79db9beffb0ce2c7f1130a86d5e0eed2f315757e2ed301c2bb4536c3ce4db"
+        }
+      ]
+    },
+    {
+      "id": "w2v-distributed",
+      "query": "How were word vector models trained across machines using DistBelief?",
+      "relevant": [
+        {
+          "document": "word2vec",
+          "page": 4,
+          "anchor": "centralized server",
+          "page_text_sha256": "f75c9797e872805bbd516aed2e3aa3a30e7a158ddd8d731a36a5489b5bee5689"
+        }
+      ]
+    },
+    {
+      "id": "w2v-questions",
+      "query": "How many semantic and syntactic analogy questions are in the word vector test set?",
+      "relevant": [
+        {
+          "document": "word2vec",
+          "page": 6,
+          "anchor": "8869 semantic and 10675 syntactic",
+          "page_text_sha256": "885b379f62faea32ef1f270dbe2f76caf1c95d34cc750efc1c6584a1a20bd93e"
+        }
+      ]
+    },
+    {
+      "id": "absent-surgery",
+      "query": "What randomized trial in these papers compares surgical treatments for appendicitis?",
+      "relevant": []
+    },
+    {
+      "id": "absent-battery",
+      "query": "What electrolyte composition produced the longest lithium battery cycle life?",
+      "relevant": []
+    },
+    {
+      "id": "absent-tax",
+      "query": "What GST invoice number belongs to vendor Shree Ganesh Traders in April 2026?",
+      "relevant": []
+    }
+  ]
+}

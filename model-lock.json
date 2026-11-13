@@ -1,0 +1,14 @@
+{
+  "model_id": "google/embeddinggemma-2",
+  "revision": "914f7f89142e33e77833254d9c9b90c3cef7303b",
+  "license": "apache-2.0",
+  "gated": false,
+  "configuration_version": "text-only-bf16-or-fp32-search-v1",
+  "config_kwargs": {"vision_config": null, "audio_config": null},
+  "native_dimensions": 768,
+  "supported_dimensions": [768, 512, 256, 128],
+  "weight_file": "model.safetensors",
+  "weight_bytes": 1488915288,
+  "weight_sha256": "197a32965d4b1105faf060417baa899e193fb73cd401f42ec9295234d5553d79",
+  "metadata_evidence": "results/environment.json"
+}

@@ -1,0 +1,261 @@
+{
+  "provenance": "Generated synthetic labels from fixture construction; not independently annotated real invoices",
+  "cases": [
+    {
+      "file": "classic.pdf",
+      "sha256": "31f6a4a641010d5e7220090e7e9f2632235dd459fd6aad65ddea4f769324c4a5",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": "2026-09-25",
+        "invoice_number": "PACK-001",
+        "direction": "sale",
+        "amount": "5310.00",
+        "currency": "INR"
+      },
+      "requires_review": false,
+      "limitation": null
+    },
+    {
+      "file": "columns.pdf",
+      "sha256": "d6a7cb57805d29e39eba059383a00c1562a79b1e3f17bbc3e61e1c4ba94d717b",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Asha Stationers",
+        "bill_date": "2026-09-24",
+        "invoice_number": "PACK-002",
+        "direction": "sale",
+        "amount": "120.00",
+        "currency": "USD"
+      },
+      "requires_review": false,
+      "limitation": null
+    },
+    {
+      "file": "cash-memo.pdf",
+      "sha256": "e798fd026ab96f46675f0f72a7c176c0634b4fb10278a4f402e0389701be80b5",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": "2026-09-26",
+        "invoice_number": "PACK-003",
+        "direction": "unspecified",
+        "amount": "950.00",
+        "currency": "INR"
+      },
+      "requires_review": false,
+      "limitation": null
+    },
+    {
+      "file": "purchase.pdf",
+      "sha256": "83bba888f6ac8d89e6eec27a26d4b4b1031949a4e548261172d698d4742971fd",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "North Paper Supply",
+        "bill_date": "2026-09-27",
+        "invoice_number": "PACK-004",
+        "direction": "purchase",
+        "amount": "12500.00",
+        "currency": "INR"
+      },
+      "requires_review": false,
+      "limitation": null
+    },
+    {
+      "file": "wrapped.pdf",
+      "sha256": "9f91ce0cdd81e260258ed377449685477b246f8b2d7d5eb8bdf791bb25209969",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": "2026-09-28",
+        "invoice_number": "PACK-005",
+        "direction": "sale",
+        "amount": "800.00",
+        "currency": "INR"
+      },
+      "requires_review": false,
+      "limitation": null
+    },
+    {
+      "file": "due-date-trap.pdf",
+      "sha256": "d81553bfdf19d1553e3bf274bd43de90c6a774d87fb8060eb50531bebd36b2a0",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Asha Stationers",
+        "bill_date": "2026-09-29",
+        "invoice_number": "PACK-006",
+        "direction": "sale",
+        "amount": "4500.00",
+        "currency": "INR"
+      },
+      "requires_review": false,
+      "limitation": null
+    },
+    {
+      "file": "missing-party.pdf",
+      "sha256": "a407869bad23900746b250e3ecc2ad274e8bc094757b30dc51e05d6d399f08cf",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "",
+        "bill_date": "2026-09-30",
+        "invoice_number": "PACK-007",
+        "direction": "sale",
+        "amount": "300.00",
+        "currency": "INR"
+      },
+      "requires_review": true,
+      "limitation": null
+    },
+    {
+      "file": "missing-date.pdf",
+      "sha256": "9b0a20916cca66ae10d3aa0191148d5b6945789d352ae6fda335bbca4d09c4e8",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": null,
+        "invoice_number": "PACK-008",
+        "direction": "sale",
+        "amount": "450.00",
+        "currency": "INR"
+      },
+      "requires_review": true,
+      "limitation": null
+    },
+    {
+      "file": "unknown-direction.pdf",
+      "sha256": "b80cb15b5938d87fc142341a2d8be890442fdaf6a37a22e99012ffd548e3ce07",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": "2026-10-01",
+        "invoice_number": "PACK-009",
+        "direction": "unspecified",
+        "amount": "400.00",
+        "currency": "EUR"
+      },
+      "requires_review": true,
+      "limitation": null
+    },
+    {
+      "file": "uppercase.pdf",
+      "sha256": "2e48295c1ca9c18f82525d5f1f38765499ca657f5dacf7c79eef71a3567be5a9",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": "2026-10-02",
+        "invoice_number": "PACK-010",
+        "direction": "sale",
+        "amount": "64.50",
+        "currency": "GBP"
+      },
+      "requires_review": false,
+      "limitation": null
+    },
+    {
+      "file": "multipage.pdf",
+      "sha256": "1aadf94c0ea99565b3e683911f1f3ad7a5216c4b316d6dacf58036795a942c69",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": "2026-10-03",
+        "invoice_number": "PACK-011",
+        "direction": "sale",
+        "amount": "6000.00",
+        "currency": "INR"
+      },
+      "requires_review": false,
+      "limitation": null
+    },
+    {
+      "file": "scan-clean.pdf",
+      "sha256": "b1cf96d8443938fd7726c58bb6cf15a5aa2d3b73f9a94253ce542bc558883dbf",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": "2026-10-04",
+        "invoice_number": "PACK-012",
+        "direction": "sale",
+        "amount": "531.00",
+        "currency": "INR"
+      },
+      "requires_review": true,
+      "limitation": null
+    },
+    {
+      "file": "scan-low-res.pdf",
+      "sha256": "4f219cd7384b1fd87c548a196659809e32126abe3e42d3dccfb8efb25f29b0be",
+      "synthetic": true,
+      "supported": true,
+      "expected": {
+        "party": "North Paper Supply",
+        "bill_date": "2026-10-05",
+        "invoice_number": "PACK-013",
+        "direction": "purchase",
+        "amount": "200.00",
+        "currency": "INR"
+      },
+      "requires_review": true,
+      "limitation": null
+    },
+    {
+      "file": "unsupported-credit.pdf",
+      "sha256": "58eeda9c1dbe38969afc95b564d5ea87f95c802e6236533a851b7b3563c41ece",
+      "synthetic": true,
+      "supported": false,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": "2026-10-06",
+        "invoice_number": "PACK-014",
+        "direction": "unspecified",
+        "amount": "100.00",
+        "currency": "INR"
+      },
+      "requires_review": false,
+      "limitation": "Unsupported credit note, decimal convention, or multi-invoice PDF"
+    },
+    {
+      "file": "unsupported-euro-decimal.pdf",
+      "sha256": "a59950f53d883b813df026d85024d508b2ab8bfc6f541af2da5e9892f97b32af",
+      "synthetic": true,
+      "supported": false,
+      "expected": {
+        "party": "Europa Office",
+        "bill_date": "2026-10-07",
+        "invoice_number": "PACK-015",
+        "direction": "unspecified",
+        "amount": "1.23456",
+        "currency": "EUR"
+      },
+      "requires_review": false,
+      "limitation": "Unsupported credit note, decimal convention, or multi-invoice PDF"
+    },
+    {
+      "file": "unsupported-bundle.pdf",
+      "sha256": "1ab39784f19e4971da57b33616f50ad83655c820c9b079cf5c655ea42b9644da",
+      "synthetic": true,
+      "supported": false,
+      "expected": {
+        "party": "Bhagwanti Trading",
+        "bill_date": "2026-10-08",
+        "invoice_number": "PACK-016",
+        "direction": "sale",
+        "amount": "600.00",
+        "currency": "INR"
+      },
+      "requires_review": false,
+      "limitation": "Unsupported credit note, decimal convention, or multi-invoice PDF"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "model_id": "Qwen/Qwen3-0.6B",
+  "quantization": "Q4_K_M",
+  "repository": "bartowski/Qwen_Qwen3-0.6B-GGUF",
+  "revision": "60b85c0e3d8fe0f6474f406922a26d12aca4550d",
+  "filename": "Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+  "size_bytes": 484220320,
+  "sha256": "9acfc1e001311f34b4252001b626f2e466d592a42065f66571bff3790d4e1b14",
+  "runtime_tag": "b11714",
+  "runtime_url": "https://github.com/ggml-org/llama.cpp/releases/download/b11714/llama-b11714-bin-win-cpu-x64.zip",
+  "runtime_sha256": "f78eded047061a3f86372db426797400a2f1bb0ec37868d5927dd820eb3386c0"
+}

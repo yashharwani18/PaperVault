@@ -1,0 +1,55 @@
+plugins { id 'com.android.application' }
+
+def bundleModels = (project.findProperty('khojBundleModels') ?: 'ON').toString().toBoolean() ||
+        (project.findProperty('khojBundleModels') ?: 'ON').toString().equalsIgnoreCase('ON')
+def updateMetadataDir = layout.buildDirectory.dir('generated/update-model-metadata')
+def updateMetadata = tasks.register('prepareUpdateModelMetadata', Sync) {
+    from('../runtime-model-assets') { include 'offline-models.json' }
+    into(updateMetadataDir)
+}
+
+android {
+    namespace 'org.localknowledge.library'
+    compileSdk 35
+    ndkVersion '28.2.13676358'
+    defaultConfig {
+        applicationId 'org.localknowledge.library'
+        minSdk 26
+        targetSdk 35
+        versionCode 21
+        versionName '0.5.0'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        ndk { abiFilters 'arm64-v8a', 'x86_64' }
+        externalNativeBuild { cmake {
+            arguments '-DLLAMA_SOURCE='+project.property('llamaSource'), '-DANDROID_STL=c++_shared', '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON', '-DKHOJ_KLEIDIAI='+(project.findProperty('khojKleidiAI') ?: 'ON'), '-DKHOJ_EXPERIMENTAL_NATIVE_BATCHES='+(project.findProperty('khojNativeBatches') ?: 'ON')
+            cppFlags '-std=c++17'
+        } }
+    }
+    externalNativeBuild { cmake { path 'src/main/cpp/CMakeLists.txt'; version '3.22.1' } }
+    sourceSets { androidTest.assets.srcDirs += ['../../.cache/bill-quality/assets','../../.cache/rag-quality/assets']; main {
+        assets.srcDirs = ['src/main/assets','../../frontend/dist',bundleModels ? '../runtime-model-assets' : updateMetadataDir]
+    } }
+    androidResources { noCompress += ['gguf','litertlm','wasm','pdf'] }
+    packaging { jniLibs { useLegacyPackaging = true }; resources { excludes += ['META-INF/DEPENDENCIES','META-INF/LICENSE*','META-INF/NOTICE*'] } }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17; coreLibraryDesugaringEnabled true }
+    buildTypes { debug { debuggable true }; release { debuggable false; minifyEnabled false; shrinkResources false; signingConfig signingConfigs.debug; proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro' } }
+    signingConfigs { debug { storeFile file('../signing/local-development.keystore') } }
+    lint { abortOnError true; disable 'ExpiredTargetSdkVersion' }
+}
+
+if (!bundleModels) tasks.named('preBuild').configure { dependsOn(updateMetadata) }
+
+dependencies {
+    implementation 'com.google.ai.edge.litertlm:litertlm-android:0.18.1'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    implementation 'androidx.webkit:webkit:1.12.1'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+    implementation 'androidx.work:work-runtime:2.10.0'
+    implementation 'com.tom-roush:pdfbox-android:2.0.27.0'
+    implementation 'com.google.mlkit:text-recognition:16.0.1'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'net.sf.kxml:kxml2:2.3.0'
+    testImplementation 'org.json:json:20240303'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+}

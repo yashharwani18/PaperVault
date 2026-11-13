@@ -1,0 +1,37 @@
+import {useEffect,useState} from 'react';
+import {ArrowUpRight,Check,LoaderCircle} from 'lucide-react';
+import {locationLabel} from './sourceTypes';
+import type {LocatedSource} from './sourceTypes';
+
+type API=(path:string,method?:string,body?:unknown)=>Promise<Response>;
+export type AssistantConfig={provider:string;model:string;cloud_enabled:boolean;key_available:boolean};
+
+export default function ModelSettings({api,onChange}:{api:API;onChange:()=>Promise<void>}){
+ const [config,setConfig]=useState<AssistantConfig|null>(null),[provider,setProvider]=useState('builtin'),[model,setModel]=useState(''),[key,setKey]=useState(''),[consent,setConsent]=useState(false),[models,setModels]=useState<string[]>([]),[busy,setBusy]=useState(''),[error,setError]=useState(''),[note,setNote]=useState('');
+ useEffect(()=>{void api('/assistant/settings').then(r=>r.json()).then((c:AssistantConfig)=>{setConfig(c);setProvider(c.provider);setModel(c.model);setConsent(c.cloud_enabled);}).catch(e=>setError(e.message));},[]);
+ const body={provider,model,cloud_enabled:consent,...(key?{api_key:key}:{})};
+ return <section className="model-settings"><h2>Choose your document assistant</h2><p>Discovery, indexing, and source search stay on this PC. Optionally ask a model to explain the passages your search retrieves.</p>
+  <form onSubmit={async e=>{e.preventDefault();setBusy('save');setError('');setNote('');try{const saved=await(await api('/assistant/settings','PUT',body)).json();setConfig(saved);setKey('');await onChange();setNote('Assistant settings saved. Existing document indexes are unchanged.');}catch(e){setError((e as Error).message);}finally{setBusy('');}}}>
+   <label className="field-label">Answering model<select aria-label="Assistant provider" disabled={!config||!!busy} value={provider} onChange={e=>{setProvider(e.target.value);setModel('');setModels([]);setConsent(false);setNote('');}}><option value="builtin">Built-in source responses</option><option value="ollama">Local model through Ollama</option><option value="claude">Claude API · cloud</option></select></label>
+   {provider==='builtin'?<p className="model-description">Keep the existing local Qwen source responses. No additional model or API key is needed.</p>:<>
+    {provider==='ollama'?<p className="model-description">Uses Ollama on this PC at 127.0.0.1:11434. Start Ollama and download a local text model that fits your hardware before connecting.</p>:<><label className="field-label">Claude API key<input type="password" autoComplete="new-password" value={key} onChange={e=>setKey(e.target.value)} placeholder={config?.key_available?'A session or environment key is available':'Paste an Anthropic API key'}/></label><p className="connection-footnote">A pasted key is kept in server memory for this session and is never saved to the library. Claude uses API billing.</p><label className="ocr-option"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>Allow Claude assistance<small>When I click “Explain these results,” send my question and up to five retrieved passages, including their filenames, to Anthropic. Loading models contacts Anthropic but sends no documents.</small></span></label></>}
+    <label className="field-label">Model ID<div className="model-input-row"><input aria-label="Assistant model ID" list="available-assistant-models" value={model} onChange={e=>setModel(e.target.value)} placeholder={provider==='ollama'?'Enter an installed model name':'Enter an available Claude model ID'}/><button type="button" className="button secondary" disabled={!!busy||provider==='claude'&&(!consent||!key&&!config?.key_available)} onClick={async()=>{setBusy('models');setError('');try{const data=await(await api('/assistant/models','POST',body)).json();setModels(data.models);setNote(data.models.length?`${data.models.length} models available. Choose a model below.`:'No models found. Install a local model in Ollama first.');}catch(e){setError((e as Error).message);}finally{setBusy('');}}}>{busy==='models'?<LoaderCircle size={15} className="spin"/>:null}Load models</button></div><datalist id="available-assistant-models">{models.map(m=><option key={m} value={m}/>)}</datalist></label>
+    {models.length>0&&<label className="field-label">Available models<select aria-label="Available assistant models" value={models.includes(model)?model:''} onChange={e=>setModel(e.target.value)}><option value="" disabled>Choose a model</option>{models.map(m=><option key={m} value={m}>{m}</option>)}</select></label>}
+   </>}
+   <button className="button primary" disabled={!config||!!busy||provider!=='builtin'&&!model.trim()||provider==='claude'&&!consent}>{busy==='save'?<LoaderCircle size={15} className="spin"/>:<Check size={15}/>}Save assistant</button>
+  </form>
+  {note&&<p className="notice" role="status">{note}</p>}{error&&<p className="notice error" role="alert">{error}</p>}
+  <p className="connection-footnote">Model explanations can be wrong. Source pages remain the reference. Switching the answering model does not reindex documents.</p>
+ </section>;
+}
+
+type Hit={chunk_id:number;source_identity:string};
+type Answer={text:string;model:string;cloud_used:boolean;sources:(LocatedSource&{number:number;document_id:string;filename:string;page_number:number})[]};
+export function AssistantAnswer({api,config,query,hits,onSettings,onOpen}:{api:API;config?:AssistantConfig;query:string;hits:Hit[];onSettings:()=>void;onOpen:(id:string,page:number)=>void}){
+ const [answer,setAnswer]=useState<Answer|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ const enabled=config&&config.provider!=='builtin';
+ if(!hits.length)return null;
+ return <section className="assistant-answer" aria-label="Optional model explanation"><div className="assistant-action"><div><strong>{enabled?`Ask ${config.model}`:'Explain what you found'}</strong><p>{enabled?config.provider==='claude'?'Sends your question and up to five source passages to Claude when requested.':'Uses your local Ollama model and up to five source passages.':'Connect a local model or Claude for optional explanations.'}</p></div>{enabled?<button className="button secondary" disabled={busy} onClick={async()=>{setBusy(true);setError('');setAnswer(null);try{const selected=hits.slice(0,5);setAnswer(await(await api('/assistant/ask','POST',{query,chunk_ids:selected.map(h=>h.chunk_id),sources:Object.fromEntries(selected.map(h=>[String(h.chunk_id),h.source_identity]))})).json());}catch(e){setError((e as Error).message);}finally{setBusy(false);}}}>{busy?<LoaderCircle className="spin" size={15}/>:<ArrowUpRight size={15}/>} {busy?'Preparing explanation…':'Explain these results'}</button>:<button className="button secondary" onClick={onSettings}>Choose AI model<ArrowUpRight size={15}/></button>}</div>
+  {busy&&<p role="status">Waiting for the selected model. Source results remain available below.</p>}{error&&<p className="notice error" role="alert">{error}</p>}{answer&&<div className="model-answer"><p className="model-answer-text">{answer.text}</p><div className="answer-source-links">{answer.sources.map(s=><button key={s.number} className="text-button" onClick={()=>onOpen(s.document_id,s.page_number)}>[{s.number}] {s.filename} · {locationLabel(s)}</button>)}</div><small>{answer.model} · {answer.cloud_used?'Cloud explanation':'Local explanation'} · Check claims against the original sources.</small></div>}
+ </section>;
+}

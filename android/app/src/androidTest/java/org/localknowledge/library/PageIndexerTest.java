@@ -1,0 +1,31 @@
+package org.localknowledge.library;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import java.util.*;
+import java.nio.charset.StandardCharsets;
+import static org.junit.Assert.*;
+@RunWith(AndroidJUnit4.class)
+public class PageIndexerTest {
+ static float[] vector(){float[] v=new float[768];v[0]=1;return v;}
+ static class Engine implements PageIndexer.Engine {
+  int batches,scalars,embedded;boolean fail;
+  public int tokens(String s){return s.contains("漢")?s.length():Math.max(1,s.length()/4);}
+  float[] vector(){float[] v=new float[768];v[0]=1;return v;}
+  public float[] scalar(String s){scalars++;embedded++;return vector();}
+  public float[][] batch(String[] s){batches++;if(fail)throw new IllegalStateException("Injected batch failure");embedded+=s.length;float[][] result=new float[s.length][];for(int i=0;i<s.length;i++)result[i]=vector();return result;}
+ }
+ LibraryStore store(){Context c=InstrumentationRegistry.getInstrumentation().getTargetContext();return ((LibraryApplication)c.getApplicationContext()).backend.store;}
+ SQLiteDatabase stage(){SQLiteDatabase d=SQLiteDatabase.create(null);d.execSQL("CREATE TABLE pages(page_number INTEGER,text TEXT,method TEXT,warnings TEXT,evidence TEXT)");d.execSQL("CREATE TABLE chunks(page_number INTEGER,chunk_index INTEGER,text TEXT,char_start INTEGER,char_end INTEGER,vector BLOB,input_hash TEXT)");return d;}
+ void coverage(SQLiteDatabase d,String text,int page){int previous=0;try(var c=d.rawQuery("SELECT char_start,char_end,text FROM chunks WHERE page_number=? ORDER BY chunk_index",new String[]{""+page})){while(c.moveToNext()){int start=c.getInt(0),end=c.getInt(1);assertTrue("Coverage gap",start<=previous);assertTrue("Redundant suffix chunk",end>previous);assertEquals(text.substring(start,end),c.getString(2));assertFalse(start>0&&Character.isLowSurrogate(text.charAt(start)));assertFalse(end<text.length()&&Character.isHighSurrogate(text.charAt(end-1)));previous=end;}}assertEquals(text.length(),previous);}
+ @Test public void wholePageIsTokenMeasuredEvenBeyond2000Characters()throws Exception{LibraryStore s=store();String sha="batch-test-"+LibraryStore.id();Engine e=new Engine(){public int tokens(String t){return t.length()/8;}};String text="Invoice source text ".repeat(160);try(SQLiteDatabase d=stage()){PageIndexer p=new PageIndexer(s,d,sha,"Invoice",e,()->{},4);p.indexPage(1,text,"native","[]","{}",n->{});assertEquals(1,p.chunkCount);coverage(d,text,1);}finally{s.exec("DELETE FROM vector_cache WHERE input_hash LIKE ?",sha+":%");}}
+ @Test public void oversizedUnicodeAndParagraphsPreserveAllOffsets()throws Exception{LibraryStore s=store();String sha="batch-test-"+LibraryStore.id();try(SQLiteDatabase d=stage()){PageIndexer p=new PageIndexer(s,d,sha,"Notes",new Engine(),()->{},4);String text="Paragraph text.\n\n".repeat(200)+"漢😀".repeat(600);p.indexPage(1,text,"ocr","[]","{}",n->{});assertTrue(p.chunkCount>1);coverage(d,text,1);try(var c=d.rawQuery("SELECT text FROM chunks",null)){while(c.moveToNext())assertTrue(new Engine().tokens("title: Notes | text: "+c.getString(0))<=512);}}finally{s.exec("DELETE FROM vector_cache WHERE input_hash LIKE ?",sha+":%");}}
+ @Test public void cachedPassagesAvoidInferenceAndEmptyPagesRemain()throws Exception{LibraryStore s=store();String sha="batch-test-"+LibraryStore.id();Engine e=new Engine();try(SQLiteDatabase d=stage()){PageIndexer p=new PageIndexer(s,d,sha,"Test",e,()->{},4);String text="Signal processing source.\n\n".repeat(180);p.indexPage(1,text,"native","[]","{}",n->{});int calls=e.embedded;p.indexPage(2,text,"native","[]","{}",n->{});assertEquals(calls,e.embedded);coverage(d,text,1);coverage(d,text,2);p.indexPage(3," ","native","[]","{}",n->{});try(var c=d.rawQuery("SELECT count(*) FROM pages",null)){assertTrue(c.moveToFirst());assertEquals(3,c.getInt(0));}}finally{s.exec("DELETE FROM vector_cache WHERE input_hash LIKE ?",sha+":%");}}
+ @Test public void fourShortPagesUseOneBatchAndFinalRemainderIsFlushed()throws Exception{LibraryStore s=store();String sha="batch-test-"+LibraryStore.id();Engine e=new Engine();try(SQLiteDatabase d=stage()){PageIndexer p=new PageIndexer(s,d,sha,"Slides",e,()->{},4,true);for(int i=1;i<=5;i++)p.indexPage(i,"Source slide "+i,"native","[]","{}",n->{});assertEquals(1,e.batches);assertEquals(4,p.chunkCount);p.finish(n->{});assertEquals(5,p.chunkCount);assertEquals(1,e.scalars);for(int i=1;i<=5;i++)coverage(d,"Source slide "+i,i);}finally{s.exec("DELETE FROM vector_cache WHERE input_hash LIKE ?",sha+":%");}}
+ @Test public void invalidBatchFallsBackAndCancellationLeavesNoTransaction()throws Exception{LibraryStore s=store();String sha="batch-test-"+LibraryStore.id();Engine e=new Engine();e.fail=true;try(SQLiteDatabase d=stage()){PageIndexer p=new PageIndexer(s,d,sha,"Test",e,()->{assertFalse(s.getWritableDatabase().inTransaction());assertFalse(d.inTransaction());},2);p.indexPage(1,"Dense source text ".repeat(300),"native","[]","{}",n->{});assertTrue(e.batches>0);assertTrue(e.scalars>0);}finally{s.exec("DELETE FROM vector_cache WHERE input_hash LIKE ?",sha+":%");}
+  for(int failure:new int[]{1,5,12,24}){String key="batch-test-"+LibraryStore.id();int[] checks={0};try(SQLiteDatabase d=stage()){PageIndexer p=new PageIndexer(s,d,key,"Test",new Engine(),()->{if(++checks[0]==failure)throw new InterruptedException("cancel");},2);try{p.indexPage(1,"Dense source text ".repeat(300),"native","[]","{}",n->{});fail("Missing cancellation");}catch(InterruptedException expected){}assertFalse(d.inTransaction());assertFalse(s.getWritableDatabase().inTransaction());}finally{s.exec("DELETE FROM vector_cache WHERE input_hash LIKE ?",key+":%");}}}
+ @Test(expected=java.io.IOException.class) public void tokenizerFailuresAreNotSwallowed()throws Exception{try(SQLiteDatabase d=stage()){PageIndexer.Engine e=new PageIndexer.Engine(){public int tokens(String s)throws Exception{throw new java.io.IOException("Model unreadable");}public float[] scalar(String s){throw new AssertionError();}public float[][] batch(String[] s){throw new AssertionError();}};new PageIndexer(store(),d,"failure","Test",e,()->{},4).indexPage(1,"Source","native","[]","{}",n->{});}}
+}

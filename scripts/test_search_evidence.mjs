@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {describeEvidence,coverageMessage} from '../frontend/src/searchEvidence.ts';
+
+const amount={field:'total',value:'6600.00',requested_value:'6500.00',difference:'100.00',currency:'INR',approximate:true,verified:false};
+let result=describeEvidence({amount_match:amount});
+assert.equal(result.label,'Nearby total: INR 6,600.00');
+assert.match(result.detail,/6,500\.00/);assert.match(result.detail,/\+100\.00/);assert.match(result.detail,/not an exact match/i);
+result=describeEvidence({amount_match:{...amount,requested_value:'6600.00',difference:'0.00',approximate:false}});
+assert.equal(result.label,'Exact total: INR 6,600.00');assert.match(result.detail,/not been reviewed/i);
+result=describeEvidence({amount_match:{...amount,field:'subtotal',value:'6400.00',difference:'-100.00'}});
+assert.equal(result.label,'Nearby subtotal: INR 6,400.00');assert.match(result.detail,/-100\.00/);
+result=describeEvidence({invoice_match:{requested_number:'25',source:'page_text'}});
+assert.equal(result.label,'Invoice number: 25');assert.match(result.detail,/indexed page text/i);
+result=describeEvidence({invoice_match:{requested_number:'25',source:'saved_field'}});
+assert.match(result.detail,/not confirmed/i);
+assert.equal(describeEvidence({score_type:'semantic'}),null);
+assert.match(coverageMessage({documents:5,searchable:3,needs_attention:2},true),/3 of 5/);
+assert.match(coverageMessage({documents:5,searchable:3,needs_attention:2},true),/still being read/i);
+assert.equal(coverageMessage({documents:5,searchable:5,needs_attention:0},false),'');
+console.log('Search evidence labels and incomplete-coverage checks passed.');

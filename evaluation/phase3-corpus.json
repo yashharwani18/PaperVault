@@ -1,0 +1,165 @@
+{
+  "scope": "Phase 3 public local evaluation corpus: 10 university lectures, 5 research papers, 5 other documents",
+  "documents": [
+    {
+      "id": "mit-dfa-nfa",
+      "title": "MIT 6.045 Lecture 3 - DFA and NFA",
+      "folder": "TOC",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-045j-automata-computability-and-complexity-spring-2011/resources/mit6_045js11_lec03/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "mit-pumping-lemma",
+      "title": "MIT 6.045 Lecture 5 - Non-regular languages and pumping lemma",
+      "folder": "TOC",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-045j-automata-computability-and-complexity-spring-2011/resources/mit6_045js11_lec05/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "mit-fourier",
+      "title": "MIT 6.003 Lecture 16 - Fourier transform",
+      "folder": "DSP",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/resources/mit6_003f11_lec16/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "attention",
+      "title": "Attention Is All You Need",
+      "folder": "Research Papers",
+      "kind": "research_paper",
+      "source_url": "https://arxiv.org/pdf/1706.03762",
+      "rights": "Publicly accessible author paper; local validation, no grant of redistribution rights assumed"
+    },
+    {
+      "id": "bert",
+      "title": "BERT - Pre-training of Deep Bidirectional Transformers",
+      "folder": "Research Papers",
+      "kind": "research_paper",
+      "source_url": "https://arxiv.org/pdf/1810.04805",
+      "rights": "Publicly accessible author paper; local validation, no grant of redistribution rights assumed"
+    },
+    {
+      "id": "think-python",
+      "title": "Think Python, second edition",
+      "folder": "Books",
+      "kind": "long_document",
+      "source_url": "https://greenteapress.com/thinkpython2/thinkpython2.pdf",
+      "rights": "Allen B. Downey, Green Tea Press; CC BY-NC 3.0 as stated in the book"
+    },
+    {
+      "id": "mit-nfa-regex",
+      "title": "MIT Lecture 4 - NFA equivalence and regular expressions",
+      "folder": "TOC",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-045j-automata-computability-and-complexity-spring-2011/resources/mit6_045js11_lec04/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "mit-turing",
+      "title": "MIT GITCS Lecture 4 - Turing Machines (6.045 supplemental notes)",
+      "folder": "TOC",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-045j-automata-computability-and-complexity-spring-2011/resources/mit6_045js11_lec06/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "mit-decidability",
+      "title": "MIT Lecture 7 - Decidability and recognizability",
+      "folder": "TOC",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-045j-automata-computability-and-complexity-spring-2011/resources/mit6_045js11_lec07/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "mit-z-transform",
+      "title": "MIT Lecture 5 - Z transform",
+      "folder": "DSP",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/resources/mit6_003f11_lec05/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "mit-convolution",
+      "title": "MIT Lecture 8 - Convolution",
+      "folder": "DSP",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/resources/mit6_003f11_lec08/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "mit-fourier-series",
+      "title": "MIT Lecture 15 - Fourier series",
+      "folder": "DSP",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/resources/mit6_003f11_lec15/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "mit-sampling",
+      "title": "MIT Lecture 21 - Sampling",
+      "folder": "DSP",
+      "kind": "university_lecture",
+      "source_url": "https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/resources/mit6_003f11_lec21/",
+      "rights": "MIT OCW; preserve source attribution and upstream terms"
+    },
+    {
+      "id": "word2vec",
+      "title": "Distributed Representations of Words and Phrases and their Compositionality",
+      "folder": "Research Papers",
+      "kind": "research_paper",
+      "source_url": "https://arxiv.org/pdf/1310.4546",
+      "rights": "Publicly accessible author paper; local validation, no redistribution rights assumed"
+    },
+    {
+      "id": "flash-attention",
+      "title": "FlashAttention - Fast and Memory-Efficient Exact Attention with IO-Awareness",
+      "folder": "Research Papers",
+      "kind": "research_paper",
+      "source_url": "https://arxiv.org/pdf/2205.14135",
+      "rights": "Publicly accessible author paper; local validation, no redistribution rights assumed"
+    },
+    {
+      "id": "adam",
+      "title": "Adam - A Method for Stochastic Optimization",
+      "folder": "Research Papers",
+      "kind": "research_paper",
+      "source_url": "https://arxiv.org/pdf/1412.6980",
+      "rights": "Publicly accessible author paper; local validation, no redistribution rights assumed"
+    },
+    {
+      "id": "nist-privacy",
+      "title": "NIST Privacy Framework 1.0",
+      "folder": "Reference",
+      "kind": "other_document",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.01162020.pdf",
+      "rights": "Public official publication; preserve copyright notices and source terms"
+    },
+    {
+      "id": "rfc-http",
+      "title": "RFC 9110 - HTTP Semantics",
+      "folder": "Reference",
+      "kind": "other_document",
+      "source_url": "https://www.rfc-editor.org/rfc/rfc9110.pdf",
+      "rights": "Public official publication; preserve copyright notices and source terms"
+    },
+    {
+      "id": "nist-csf",
+      "title": "NIST Cybersecurity Framework 2.0",
+      "folder": "Reference",
+      "kind": "other_document",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf",
+      "rights": "Public official publication; preserve copyright notices and source terms"
+    },
+    {
+      "id": "think-stats",
+      "title": "Think Stats, second edition",
+      "folder": "Reference",
+      "kind": "other_document",
+      "source_url": "https://greenteapress.com/thinkstats2/thinkstats2.pdf",
+      "rights": "Allen B. Downey, Green Tea Press; preserve the CC BY-NC-SA notice in the book"
+    }
+  ]
+}

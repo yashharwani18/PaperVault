@@ -1,0 +1,14 @@
+# PyTorch is installed separately from https://download.pytorch.org/whl/cu130.
+sentence-transformers[image]==6.1.0
+transformers==5.20.1
+# Upstream AutoProcessor requires image processor dependencies even for text-only encoders.
+Pillow>=10.0.1,<=15.0
+psutil>=7,<9
+pytest>=8,<10
+PyMuPDF==1.28.2
+fastapi==0.143.3
+uvicorn==0.54.0
+python-multipart==0.0.32
+reportlab==5.0.1
+playwright==1.64.0
+cryptography==50.0.2

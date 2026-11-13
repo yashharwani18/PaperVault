@@ -1,0 +1,11 @@
+{
+  "scope": "Phase 2 functional corpus, not the Phase 3 20-document/30-query evaluation",
+  "documents": [
+    {"id":"mit-dfa-nfa","title":"MIT 6.045 Lecture 3 - DFA and NFA","folder":"TOC","kind":"university_lecture","source_url":"https://ocw.mit.edu/courses/6-045j-automata-computability-and-complexity-spring-2011/resources/mit6_045js11_lec03/","rights":"MIT OCW; preserve source attribution and upstream terms"},
+    {"id":"mit-pumping-lemma","title":"MIT 6.045 Lecture 5 - Non-regular languages and pumping lemma","folder":"TOC","kind":"university_lecture","source_url":"https://ocw.mit.edu/courses/6-045j-automata-computability-and-complexity-spring-2011/resources/mit6_045js11_lec05/","rights":"MIT OCW; preserve source attribution and upstream terms"},
+    {"id":"mit-fourier","title":"MIT 6.003 Lecture 16 - Fourier transform","folder":"DSP","kind":"university_lecture","source_url":"https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/resources/mit6_003f11_lec16/","rights":"MIT OCW; preserve source attribution and upstream terms"},
+    {"id":"attention","title":"Attention Is All You Need","folder":"Research Papers","kind":"research_paper","source_url":"https://arxiv.org/pdf/1706.03762","rights":"Publicly accessible author paper; local validation, no grant of redistribution rights assumed"},
+    {"id":"bert","title":"BERT - Pre-training of Deep Bidirectional Transformers","folder":"Research Papers","kind":"research_paper","source_url":"https://arxiv.org/pdf/1810.04805","rights":"Publicly accessible author paper; local validation, no grant of redistribution rights assumed"},
+    {"id":"think-python","title":"Think Python, second edition","folder":"Books","kind":"long_document","source_url":"https://greenteapress.com/thinkpython2/thinkpython2.pdf","rights":"Allen B. Downey, Green Tea Press; CC BY-NC 3.0 as stated in the book"}
+  ]
+}

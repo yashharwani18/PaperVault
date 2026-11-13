@@ -1,0 +1,74 @@
+[
+  {
+    "id": "manual-attribution-average",
+    "kind": "new-manual",
+    "document": "2610_40655v1",
+    "query": "Why can using a document-wide average hide the training tokens responsible for a fact?",
+    "relevant": [
+      {
+        "page": 1,
+        "anchor": "scores across the entire document"
+      }
+    ]
+  },
+  {
+    "id": "manual-attribution-recall",
+    "kind": "new-manual",
+    "document": "2610_40655v1",
+    "query": "What effect did pooling only top scoring tokens have on ground truth recall in the controlled attribution experiment?",
+    "relevant": [
+      {
+        "page": 1,
+        "anchor": "35 to 72 percentage points"
+      }
+    ]
+  },
+  {
+    "id": "manual-film-edits",
+    "kind": "new-manual",
+    "document": "2610_40653v1",
+    "query": "How do rhythm edits and view edits change a film in the proposed micro editing system?",
+    "relevant": [
+      {
+        "page": 1,
+        "anchor": "rhythm edits adjust timing"
+      }
+    ]
+  },
+  {
+    "id": "manual-film-window",
+    "kind": "new-manual",
+    "document": "2610_40653v1",
+    "query": "What restricts the allowed window for independently adjusting sound and image cuts?",
+    "relevant": [
+      {
+        "page": 1,
+        "anchor": "audio visual synchrony constrained windows"
+      }
+    ]
+  },
+  {
+    "id": "manual-plasma-grid",
+    "kind": "new-manual",
+    "document": "2610_40528v1",
+    "query": "Why can NEOPIC evaluate fields at particle locations without depositing particles onto a mesh?",
+    "relevant": [
+      {
+        "page": 1,
+        "anchor": "operator that acts directly on the empirical measure of the particles"
+      }
+    ]
+  },
+  {
+    "id": "manual-plasma-noise",
+    "kind": "new-manual",
+    "document": "2610_40528v1",
+    "query": "What role does noise in the training particles play in NEOPIC learning?",
+    "relevant": [
+      {
+        "page": 1,
+        "anchor": "acts as an implicit regularizer"
+      }
+    ]
+  }
+]

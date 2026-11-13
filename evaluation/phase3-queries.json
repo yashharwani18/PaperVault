@@ -1,0 +1,791 @@
+{
+  "created_at": "2026-10-17T12:00:57.901296+00:00",
+  "judgment_provenance": "Coding-agent source inspection before retrieval. Not independently human annotated. Six Phase 2 topics restricted to dev.",
+  "judgment_scope": "Positive page judgments are non-exhaustive; unjudged pages score as non-relevant. Physical 1-based PDF pages. Inspect evidence before interpreting misses.",
+  "queries": [
+    {
+      "id": "pumping-statement",
+      "query": "Where is the general pumping lemma stated, including the repeatable middle part of an accepted word?",
+      "split": "dev",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "mit-pumping-lemma",
+          "page": 18
+        },
+        {
+          "document": "mit-pumping-lemma",
+          "page": 19
+        },
+        {
+          "document": "mit-pumping-lemma",
+          "page": 20
+        },
+        {
+          "document": "mit-pumping-lemma",
+          "page": 22
+        }
+      ]
+    },
+    {
+      "id": "alternative-transitions",
+      "query": "How can a state machine consider several successor states for the same input symbol?",
+      "split": "dev",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-dfa-nfa",
+          "page": 44
+        },
+        {
+          "document": "mit-dfa-nfa",
+          "page": 45
+        },
+        {
+          "document": "mit-dfa-nfa",
+          "page": 46
+        },
+        {
+          "document": "mit-nfa-regex",
+          "page": 5
+        },
+        {
+          "document": "mit-nfa-regex",
+          "page": 6
+        }
+      ]
+    },
+    {
+      "id": "time-convolution",
+      "query": "Which rule turns convolution in time into multiplication of frequency spectra?",
+      "split": "dev",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-fourier",
+          "page": 10
+        }
+      ]
+    },
+    {
+      "id": "scaled-attention",
+      "query": "Why are query-key dot products scaled down before the softmax in an attention layer?",
+      "split": "dev",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "attention",
+          "page": 4
+        }
+      ]
+    },
+    {
+      "id": "hidden-token-training",
+      "query": "How is a model trained to guess hidden tokens from words on both sides?",
+      "split": "dev",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "bert",
+          "page": 4
+        },
+        {
+          "document": "bert",
+          "page": 12
+        }
+      ]
+    },
+    {
+      "id": "recursive-stopping",
+      "query": "How do I keep a recursive function from calling itself forever?",
+      "split": "dev",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "think-python",
+          "page": 66
+        },
+        {
+          "document": "think-python",
+          "page": 67
+        }
+      ]
+    },
+    {
+      "id": "z-convergence",
+      "query": "Where do the notes define the region of convergence for a Z transform?",
+      "split": "dev",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "mit-z-transform",
+          "page": 20
+        },
+        {
+          "document": "mit-z-transform",
+          "page": 21
+        }
+      ]
+    },
+    {
+      "id": "lti-output",
+      "query": "How can I compute an LTI system's output from its impulse response and an arbitrary input?",
+      "split": "dev",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-convolution",
+          "page": 21
+        },
+        {
+          "document": "mit-convolution",
+          "page": 22
+        },
+        {
+          "document": "mit-convolution",
+          "page": 42
+        },
+        {
+          "document": "mit-convolution",
+          "page": 49
+        },
+        {
+          "document": "mit-convolution",
+          "page": 74
+        }
+      ]
+    },
+    {
+      "id": "series-decomposition",
+      "query": "Find the Fourier series analysis and synthesis equations for a periodic signal.",
+      "split": "dev",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "mit-fourier-series",
+          "page": 3
+        },
+        {
+          "document": "mit-fourier-series",
+          "page": 4
+        },
+        {
+          "document": "mit-fourier-series",
+          "page": 5
+        },
+        {
+          "document": "mit-fourier-series",
+          "page": 6
+        }
+      ]
+    },
+    {
+      "id": "negative-sampling",
+      "query": "Find the explanation of negative sampling as an alternative to hierarchical softmax.",
+      "split": "dev",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "word2vec",
+          "page": 3
+        },
+        {
+          "document": "word2vec",
+          "page": 4
+        }
+      ]
+    },
+    {
+      "id": "adam-initial-bias",
+      "query": "Why must Adam correct the moving averages that start from zero?",
+      "split": "dev",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "adam",
+          "page": 2
+        },
+        {
+          "document": "adam",
+          "page": 3
+        }
+      ]
+    },
+    {
+      "id": "csf-profiles",
+      "query": "What is the difference between a Current Profile and a Target Profile in the cybersecurity framework?",
+      "split": "dev",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "nist-csf",
+          "page": 11
+        },
+        {
+          "document": "nist-csf",
+          "page": 12
+        }
+      ]
+    },
+    {
+      "id": "dfa-components",
+      "query": "Which five components formally define a deterministic finite automaton?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-dfa-nfa",
+          "page": 8
+        }
+      ]
+    },
+    {
+      "id": "nfa-equivalence",
+      "query": "Does nondeterminism let finite automata recognize more languages, or can a DFA simulate them?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-nfa-regex",
+          "page": 20
+        }
+      ]
+    },
+    {
+      "id": "regex-rules",
+      "query": "Where are regular expressions defined recursively using union, concatenation, and star?",
+      "split": "test",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "mit-nfa-regex",
+          "page": 39
+        },
+        {
+          "document": "mit-nfa-regex",
+          "page": 40
+        }
+      ]
+    },
+    {
+      "id": "writable-tape",
+      "query": "What extra ability gives a Turing machine unbounded memory beyond a two-way finite automaton?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-turing",
+          "page": 1
+        }
+      ]
+    },
+    {
+      "id": "recognizer-decider",
+      "query": "How does always terminating distinguish a decider from a recognizer?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-decidability",
+          "page": 5
+        },
+        {
+          "document": "mit-decidability",
+          "page": 6
+        }
+      ]
+    },
+    {
+      "id": "parallel-recognizers",
+      "query": "Why must recognizers for a language and its complement be interleaved instead of run one after another?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-decidability",
+          "page": 9
+        },
+        {
+          "document": "mit-decidability",
+          "page": 11
+        }
+      ]
+    },
+    {
+      "id": "z-bilateral",
+      "query": "Find the bilateral Z transform that includes both negative and positive discrete times.",
+      "split": "test",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "mit-z-transform",
+          "page": 14
+        }
+      ]
+    },
+    {
+      "id": "z-delay",
+      "query": "How does delaying a discrete signal by one sample change its Z transform?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-z-transform",
+          "page": 23
+        }
+      ]
+    },
+    {
+      "id": "time-invariance",
+      "query": "What does it mean for a system to delay its output by the same amount as its input?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-convolution",
+          "page": 19
+        }
+      ]
+    },
+    {
+      "id": "optical-blur",
+      "query": "How can a microscope's point-spread function describe image blurring?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-convolution",
+          "page": 55
+        },
+        {
+          "document": "mit-convolution",
+          "page": 56
+        },
+        {
+          "document": "mit-convolution",
+          "page": 57
+        },
+        {
+          "document": "mit-convolution",
+          "page": 62
+        }
+      ]
+    },
+    {
+      "id": "vowel-harmonics",
+      "query": "Which lecture uses the harmonic content of vowel sounds to illustrate Fourier series?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-fourier-series",
+          "page": 14
+        },
+        {
+          "document": "mit-fourier-series",
+          "page": 15
+        },
+        {
+          "document": "mit-fourier-series",
+          "page": 16
+        }
+      ]
+    },
+    {
+      "id": "filter-frequencies",
+      "query": "Can an LTI filter create new frequencies or only change existing magnitudes and phases?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-fourier-series",
+          "page": 20
+        }
+      ]
+    },
+    {
+      "id": "transform-domain",
+      "query": "How do the Fourier and Laplace transforms differ in whether their input domain is real or complex?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-fourier",
+          "page": 11
+        },
+        {
+          "document": "mit-fourier",
+          "page": 12
+        },
+        {
+          "document": "mit-fourier",
+          "page": 13
+        }
+      ]
+    },
+    {
+      "id": "nyquist",
+      "query": "How fast must I sample a bandlimited signal to reconstruct it without losing information?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "mit-sampling",
+          "page": 21
+        },
+        {
+          "document": "mit-sampling",
+          "page": 60
+        }
+      ]
+    },
+    {
+      "id": "alias-wrapping",
+      "query": "Find the slides showing how aliasing wraps input frequencies into different output frequencies.",
+      "split": "test",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "mit-sampling",
+          "page": 31
+        },
+        {
+          "document": "mit-sampling",
+          "page": 32
+        },
+        {
+          "document": "mit-sampling",
+          "page": 33
+        }
+      ]
+    },
+    {
+      "id": "position-order",
+      "query": "How does a Transformer know token order when it has no recurrence or convolution?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "attention",
+          "page": 6
+        }
+      ]
+    },
+    {
+      "id": "bert-sentence-pairs",
+      "query": "How does BERT build positive and negative sentence pairs for next sentence prediction?",
+      "split": "test",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "bert",
+          "page": 4
+        },
+        {
+          "document": "bert",
+          "page": 13
+        }
+      ]
+    },
+    {
+      "id": "frequent-word-discard",
+      "query": "Why does word-vector training randomly discard very frequent words, and how does that help rare words?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "word2vec",
+          "page": 4
+        },
+        {
+          "document": "word2vec",
+          "page": 5
+        }
+      ]
+    },
+    {
+      "id": "flash-io",
+      "query": "Which attention algorithm reduces GPU memory traffic by working in tiles stored in on-chip SRAM?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "flash-attention",
+          "page": 1
+        },
+        {
+          "document": "flash-attention",
+          "page": 2
+        },
+        {
+          "document": "flash-attention",
+          "page": 4
+        },
+        {
+          "document": "flash-attention",
+          "page": 5
+        }
+      ]
+    },
+    {
+      "id": "flash-recompute",
+      "query": "How can the attention backward pass save memory by reconstructing intermediates instead of keeping the full matrix?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "flash-attention",
+          "page": 5
+        }
+      ]
+    },
+    {
+      "id": "adam-moments",
+      "query": "Find Adam's parameter update using first and second gradient moment estimates.",
+      "split": "test",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "adam",
+          "page": 2
+        }
+      ]
+    },
+    {
+      "id": "list-alias",
+      "query": "Why does changing a list through one variable also change what another variable sees?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "think-python",
+          "page": 118
+        },
+        {
+          "document": "think-python",
+          "page": 119
+        }
+      ]
+    },
+    {
+      "id": "p-value-meaning",
+      "query": "What probability does a p-value describe under a null hypothesis?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "think-stats",
+          "page": 138
+        },
+        {
+          "document": "think-stats",
+          "page": 141
+        }
+      ]
+    },
+    {
+      "id": "multiple-tests",
+      "query": "Why can trying many significance tests produce false discoveries, and how can exploration and testing be separated?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "think-stats",
+          "page": 152
+        }
+      ]
+    },
+    {
+      "id": "privacy-without-breach",
+      "query": "Can ordinary data processing harm privacy even when there is no cybersecurity incident?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "nist-privacy",
+          "page": 7
+        },
+        {
+          "document": "nist-csf",
+          "page": 18
+        }
+      ]
+    },
+    {
+      "id": "unlinkable-processing",
+      "query": "Where are ways to limit identifying and linking people during data processing described?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "nist-privacy",
+          "page": 28
+        },
+        {
+          "document": "nist-privacy",
+          "page": 33
+        },
+        {
+          "document": "nist-privacy",
+          "page": 38
+        }
+      ]
+    },
+    {
+      "id": "http-idempotence",
+      "query": "When is repeating an HTTP request intended to have the same effect as sending it once?",
+      "split": "test",
+      "kind": "conceptual",
+      "relevant": [
+        {
+          "document": "rfc-http",
+          "page": 73
+        }
+      ]
+    },
+    {
+      "id": "http-304",
+      "query": "Why can an HTTP server return 304 Not Modified instead of retransmitting a representation?",
+      "split": "test",
+      "kind": "exact",
+      "relevant": [
+        {
+          "document": "rfc-http",
+          "page": 135
+        },
+        {
+          "document": "rfc-http",
+          "page": 136
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-halting",
+      "query": "Where do the MIT notes discuss the halting problem?",
+      "split": "test",
+      "kind": "ambiguous_multi_document",
+      "relevant": [
+        {
+          "document": "mit-turing",
+          "page": 3
+        },
+        {
+          "document": "mit-decidability",
+          "page": 46
+        },
+        {
+          "document": "mit-decidability",
+          "page": 47
+        },
+        {
+          "document": "mit-decidability",
+          "page": 48
+        },
+        {
+          "document": "mit-decidability",
+          "page": 50
+        },
+        {
+          "document": "mit-decidability",
+          "page": 51
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-attention-cost",
+      "query": "Which papers discuss attention costs growing quadratically with sequence length?",
+      "split": "test",
+      "kind": "ambiguous_multi_document",
+      "relevant": [
+        {
+          "document": "attention",
+          "page": 6
+        },
+        {
+          "document": "bert",
+          "page": 13
+        },
+        {
+          "document": "flash-attention",
+          "page": 1
+        },
+        {
+          "document": "flash-attention",
+          "page": 4
+        }
+      ]
+    },
+    {
+      "id": "no-answer-bread",
+      "query": "How do I bake a sourdough loaf with a crisp crust?",
+      "split": "dev",
+      "kind": "no_answer",
+      "relevant": []
+    },
+    {
+      "id": "no-answer-garden",
+      "query": "When should I prune a mango tree in my garden?",
+      "split": "dev",
+      "kind": "no_answer",
+      "relevant": []
+    },
+    {
+      "id": "no-answer-payroll",
+      "query": "Find my September 2026 salary slip and bank account number.",
+      "split": "dev",
+      "kind": "no_answer",
+      "relevant": []
+    },
+    {
+      "id": "no-answer-travel",
+      "query": "Where is my confirmed flight booking to Osaka next week?",
+      "split": "test",
+      "kind": "no_answer",
+      "relevant": []
+    },
+    {
+      "id": "no-answer-medical",
+      "query": "Find the discharge summary from my knee surgery.",
+      "split": "test",
+      "kind": "no_answer",
+      "relevant": []
+    },
+    {
+      "id": "no-answer-housing",
+      "query": "What rent and deposit did I agree to in my signed apartment lease?",
+      "split": "test",
+      "kind": "no_answer",
+      "relevant": []
+    },
+    {
+      "id": "no-answer-sports",
+      "query": "Which document gives the score of yesterday's cricket final?",
+      "split": "test",
+      "kind": "no_answer",
+      "relevant": []
+    },
+    {
+      "id": "no-answer-recipe",
+      "query": "How long should I roast a whole chicken with potatoes?",
+      "split": "test",
+      "kind": "no_answer",
+      "relevant": []
+    }
+  ],
+  "pre_ranking_source_audit": [
+    {
+      "query_id": "privacy-without-breach",
+      "document": "nist-csf",
+      "old_page": 17,
+      "new_page": 18,
+      "reason": "Pre-retrieval source audit: the substantive explanation occurs on the next physical page. No ranking has been run."
+    },
+    {
+      "query_id": "ambiguous-attention-cost",
+      "document": "flash-attention",
+      "old_page": 3,
+      "new_page": 4,
+      "reason": "Pre-retrieval source audit: the substantive explanation occurs on the next physical page. No ranking has been run."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "scope":"Six hand-checked functional questions, not a statistically meaningful quality benchmark",
+  "verification":"Relevant source-page text inspected before retrieval. Pumping lemma and BERT pages were also rendered and visually checked. Physical PDF pages are one-based; printed page labels can differ.",
+  "queries":[
+    {"id":"repeat-accepted-word","query":"What fact about finite automata lets me repeat part of a long accepted word without leaving the language?","document":"mit-pumping-lemma","pages":[18,19],"rationale":"The pumping-lemma statement and its finite-state proof."},
+    {"id":"alternative-transitions","query":"How can a state machine consider several successor states for the same input symbol?","document":"mit-dfa-nfa","pages":[44],"rationale":"Nondeterministic transition rules permit several successor states."},
+    {"id":"time-convolution","query":"Which rule turns convolution in time into multiplication of frequency spectra?","document":"mit-fourier","pages":[10],"rationale":"The Fourier/Laplace properties table contains the convolution row."},
+    {"id":"scaled-attention","query":"Why are query-key dot products scaled down before the softmax in an attention layer?","document":"attention","pages":[4],"rationale":"Scaled dot-product attention definition and saturation motivation."},
+    {"id":"hidden-token-training","query":"How is a model trained to guess hidden tokens from words on both sides?","document":"bert","pages":[4],"rationale":"Masked-language-model objective, masking procedure and bidirectional context."},
+    {"id":"recursive-stopping","query":"How do I keep a recursive function from calling itself forever?","document":"think-python","pages":[66,67],"rationale":"Base cases, recursive stack frames and infinite recursion."}
+  ]
+}

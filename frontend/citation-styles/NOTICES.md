@@ -1,0 +1,9 @@
+# Offline citation data and formatter notices
+
+Khoj uses the unmodified citeproc-js 2.4.63 npm package (processor 1.4.61), copyright (c) 2009–2019 Frank Bennett, under the Common Public Attribution License 1.0 option. See `citeproc-LICENSE.txt` and `citeproc-CPAL.txt`. Source: https://github.com/Juris-M/citeproc-js ; exact package integrity is pinned in `../pnpm-lock.yaml`. The covered formatter source is distributed in the dependency package without modifications. Attribution phrase: **citeproc-js implements the Citation Style Language**. Attribution URL: https://citationstyles.org/ . The reference panel displays the attribution.
+
+The CSL project provides the bundled citation styles and locales under Creative Commons Attribution-ShareAlike 3.0 Unported, https://creativecommons.org/licenses/by-sa/3.0/ . Source: https://citationstyles.org/ . All styles and locales are unmodified, and their author/contributor/translator information and license metadata are retained. See `styles-README.md`, `locales-README.md`, and each XML file. `manifest.json` pins downloaded source URLs, upstream commit revisions, and SHA-256 hashes. `bundle.js` is a generated string container for those same files.
+
+Built-in styles: APA 7th edition; IEEE Reference Guide 11.29.2023; MLA 9th edition; Chicago 18th edition author-date; Harvard/Cite Them Right 12th edition; NLM/Vancouver Citing Medicine 2nd edition citation-sequence. English US and UK locales are bundled. The formatting engine makes no network requests. Custom styles must be independent CSL with a bibliography; users can also provide a matching locale XML. Non-English formatting requires that locale rather than fabricating translated terms.
+
+XML validation uses the unmodified `@xmldom/xmldom` 0.9.12 package under MIT license; source: https://github.com/xmldom/xmldom . Package integrity is pinned in `../pnpm-lock.yaml`; its license is included in the installed dependency.

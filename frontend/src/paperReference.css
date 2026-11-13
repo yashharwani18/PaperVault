@@ -1,0 +1,16 @@
+.paper-reference{margin:24px 0;border-top:1px solid var(--border,#413a46);padding-top:16px;min-width:0}
+.reference-heading{display:flex;align-items:center;gap:8px;width:100%;padding:4px 0;background:none;border:0;color:var(--ink,#ebe7ee);text-align:left;cursor:pointer;font:inherit;font-size:13px}
+.reference-heading span{margin-left:auto;font-size:11px;color:var(--muted,#b0a6b6)}
+.reference-heading:hover strong,.reference-heading:focus-visible strong{text-decoration:underline;text-underline-offset:4px}
+.reference-content{padding-top:12px;display:grid;gap:12px;font-size:12px;line-height:1.6}
+.reference-content p{margin:0}.reference-content .field-label{margin:0;font-size:12px;display:grid;gap:5px}
+.reference-content input,.reference-content select{width:100%;min-width:0;box-sizing:border-box;font-size:12px}
+.reference-preview{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;line-height:1.75;background:var(--surface,#252128);color:var(--ink,#ebe7ee);padding:12px;border-radius:6px;margin:0;user-select:text;max-height:300px;overflow:auto}
+.reference-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.reference-actions .text-button{font-size:12px}
+.reference-note,.reference-custom p{color:var(--muted,#b0a6b6);font-size:11px}.reference-error{color:#f3b6b6;font-size:12px;overflow-wrap:anywhere}
+.reference-warnings{color:var(--muted,#b0a6b6)}.reference-warnings summary{cursor:pointer}.reference-warnings ul{margin:8px 0;padding-left:18px}
+.reference-editor fieldset{border:0;padding:0;display:grid;gap:12px;min-width:0}.reference-editor{border-top:1px solid var(--border,#413a46);padding-top:16px}
+.reference-author{display:flex;align-items:end;gap:6px;margin-bottom:8px}.reference-author label{flex:1;min-width:0}.reference-author .icon-button{flex:0 0 30px}
+.reference-custom{display:grid;gap:8px}.reference-custom input[type=file]{font-size:11px}.reference-content summary{font-size:12px}
+.reference-heading:focus-visible,.reference-content button:focus-visible,.reference-content input:focus-visible,.reference-content select:focus-visible,.reference-content summary:focus-visible{outline:2px solid #c9b2d9;outline-offset:3px}
+@media(max-width:600px){.reference-author{flex-wrap:wrap}.reference-actions .button{min-height:36px}.reference-content{font-size:13px}}
