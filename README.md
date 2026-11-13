@@ -35,6 +35,12 @@ Unlike tools that force you to manually curate folders or drag-and-drop files on
 
 **Exact words count too.** Invoice numbers, UUIDs, function signatures, error codes, and tax IDs are matched verbatim using SQLite FTS5, so search combines deep semantic understanding with exact lexical precision.
 
+### Engineering highlights
+
+* **“Show me the 2.6k bill” finds the ₹2,614 invoice.** PaperVault expands `2.6k` to `2600` and looks for invoice totals within a small tolerance. It shows ₹2,614 as a nearby match, reports the ₹14 difference, and links to the original PDF page so you can check the amount. Add “exactly” to search for the exact amount.
+* **See matches while the full search runs.** On Windows, PaperVault checks exact filenames first. For general content searches, a fast keyword lookup can show matching passages while the full search runs. These previews prioritize PDFs, then Word documents, spreadsheets such as CSV and XLSX, and slides such as PPTX. The full search ranks results by relevance.
+* **Reuse embeddings after a PDF changes.** When PaperVault reindexes an edited PDF, it reuses embeddings for passages whose inputs and model settings still match. It computes new vectors only for passages that need them.
+
 ---
 
 ## Whole-PC discovery — zero folder sorting
