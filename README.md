@@ -109,6 +109,8 @@ your words  ──► query encoder                             ─────�
 
 PaperVault runs EmbeddingGemma 2 locally using PyTorch CUDA on NVIDIA GPUs (falling back cleanly to CPU instructions where no dedicated GPU is available). Every document passage lives in the same 768-dimensional vector space, indexed alongside a full-text SQLite FTS5 table. Reciprocal Rank Fusion (RRF) merges semantic embeddings and exact lexical hits into a single, ranked result list.
 
+When installed, Qwen3-0.6B runs locally to interpret natural-language searches, including invoice queries with details like a party, date, or amount.
+
 ---
 
 ## Install
@@ -170,6 +172,7 @@ PaperVault is free and open source under the **Apache License 2.0**. If PaperVau
 ## Thanks & Open Source
 
 * [Google DeepMind EmbeddingGemma 2](https://huggingface.co/google/embeddinggemma-2) (Apache 2.0)
+* Thanks to the Qwen team for releasing [Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B) under Apache 2.0, and to [bartowski for the Q4_K_M GGUF build](https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF) used on Windows.
 * [Mozilla PDF.js](https://github.com/mozilla/pdf.js) (Apache 2.0)
 * [FastAPI](https://fastapi.tiangolo.com/) & [Uvicorn](https://www.uvicorn.org/)
 * [SQLite](https://sqlite.org/) with FTS5
