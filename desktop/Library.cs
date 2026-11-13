@@ -16,9 +16,9 @@ using Microsoft.Web.WebView2.WinForms;
 
 [assembly: AssemblyVersion("0.5.0.0")]
 [assembly: AssemblyFileVersion("0.5.0.0")]
-[assembly: AssemblyProduct("Khoj")]
-[assembly: AssemblyTitle("Khoj")]
-[assembly: AssemblyDescription("Khoj v0.5 — Find your files")]
+[assembly: AssemblyProduct("PaperVault")]
+[assembly: AssemblyTitle("PaperVault")]
+[assembly: AssemblyDescription("PaperVault v0.5 — Whole-PC Neural Document Studio")]
 
 internal static class Program
 {
@@ -37,13 +37,14 @@ internal static class Program
             catch { /* A malformed local preference must not prevent startup. */ }
         }
         int debugPort = 0;
-        bool quit = false, waitForExit = false;
+        bool quit = false, waitForExit = false, startMinimized = false;
         for (int i = 0; i < args.Length; i++)
         {
             if (args[i] == "--library" && i + 1 < args.Length) library = args[++i];
             else if (args[i] == "--debug-port" && i + 1 < args.Length) { int port = int.Parse(args[++i]); if (!release) debugPort = port; }
             else if (args[i] == "--quit") quit = true;
             else if (args[i] == "--wait") waitForExit = true;
+            else if (args[i] == "--minimized" || args[i] == "--startup") startMinimized = true;
         }
         library = Path.GetFullPath(library);
         string key;
@@ -68,8 +69,8 @@ internal static class Program
                 return;
             }
             if (!first) { show.Set(); return; }
-            try { Application.Run(new LibraryWindow(root, library, show, exit, debugPort)); }
-            catch (Exception error) { MessageBox.Show(error.Message, "Khoj could not start", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            try { Application.Run(new LibraryWindow(root, library, show, exit, debugPort, startMinimized)); }
+            catch (Exception error) { MessageBox.Show(error.Message, "PaperVault could not start", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
     }
     public class Config { public Config() {} public string library_path { get; set; } }
@@ -103,13 +104,14 @@ internal sealed class LibraryWindow : Form
     private readonly HttpClient http = new HttpClient(new HttpClientHandler { UseProxy = false });
     private Process backend;
     private BackendReady ready;
-    private bool stopping, closed, everReady;
+    private bool stopping, closed, everReady, startMinimized;
 
-    internal LibraryWindow(string root, string library, EventWaitHandle showSignal, EventWaitHandle exitSignal, int debugPort)
+    internal LibraryWindow(string root, string library, EventWaitHandle showSignal, EventWaitHandle exitSignal, int debugPort, bool startMinimized = false)
     {
         this.root = root; this.library = library; this.showSignal = showSignal; this.debugPort = debugPort;
         this.exitSignal = exitSignal;
-        Text = "Khoj v0.5";
+        this.startMinimized = startMinimized;
+        Text = "PaperVault v0.5";
         StartPosition = FormStartPosition.CenterScreen;
         Size = new Size(1320, 920);
         MinimumSize = new Size(960, 650);
@@ -119,31 +121,39 @@ internal sealed class LibraryWindow : Form
         status.Dock = DockStyle.Fill;
         status.TextAlign = ContentAlignment.MiddleCenter;
         status.Font = new Font("Segoe UI", 18);
-        status.Text = "Opening your library…\nStarting the local document engine.";
+        status.Text = "Opening PaperVault…\nStarting the whole-PC document engine.";
         help.Dock = DockStyle.Bottom;
         help.Height = 28;
         help.TextAlign = ContentAlignment.MiddleLeft;
         help.Padding = new Padding(12, 0, 0, 0);
         help.Font = new Font("Segoe UI", 9);
         help.ForeColor = Color.FromArgb(176, 166, 182);
-        help.Text = "Minimize to keep folder checks running in the tray. Closing this window exits Khoj.";
+        help.Text = "Minimize to keep whole-PC indexing running in the tray. Closing this window exits PaperVault.";
         view.Dock = DockStyle.Fill;
         view.DefaultBackgroundColor = BackColor;
         view.Visible = false;
         Controls.Add(status); Controls.Add(view); Controls.Add(help);
         tray.Icon = Icon;
-        tray.Text = "Khoj v0.5 — Find your files";
+        tray.Text = "PaperVault v0.5 — Whole-PC Neural Document Studio";
         var menu = new ContextMenuStrip { BackColor = BackColor, ForeColor = ForeColor };
-        menu.Items.Add("Open Khoj", null, (s, e) => RestoreWindow());
-        menu.Items.Add("Exit Khoj", null, (s, e) => Close());
+        menu.Items.Add("Open PaperVault", null, (s, e) => RestoreWindow());
+        menu.Items.Add("Exit PaperVault", null, (s, e) => Close());
         tray.ContextMenuStrip = menu;
         tray.DoubleClick += (s, e) => RestoreWindow();
         tray.Visible = true;
+        if (startMinimized)
+        {
+            WindowState = FormWindowState.Minimized;
+            ShowInTaskbar = false;
+        }
         signalTimer.Interval = 300;
         signalTimer.Tick += (s, e) => { if (exitSignal.WaitOne(0)) Close(); else if (showSignal.WaitOne(0)) RestoreWindow(); };
         signalTimer.Start();
         Resize += (s, e) => { if (WindowState == FormWindowState.Minimized && everReady) Hide(); };
-        Shown += async (s, e) => await StartEngine();
+        Shown += async (s, e) => {
+            if (startMinimized) Hide();
+            await StartEngine();
+        };
         FormClosing += OnClosing;
         FormClosed += (s, e) => { closed = true; signalTimer.Stop(); tray.Visible = false; tray.Dispose(); http.Dispose(); };
         readyPath = Path.Combine(library, "native", "session-" + Guid.NewGuid().ToString("N") + ".json");

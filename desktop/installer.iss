@@ -7,18 +7,18 @@
 
 [Setup]
 AppId={{3BD5A436-7156-4B9D-B87D-112BA51CCFAB}
-AppName=Khoj
+AppName=PaperVault
 AppVersion=0.5.0
-AppVerName=Khoj v0.5
-DefaultDirName={localappdata}\Programs\LocalKnowledgeLibrary
-DefaultGroupName=Khoj
+AppVerName=PaperVault v0.5
+DefaultDirName={localappdata}\Programs\PaperVault
+DefaultGroupName=PaperVault
 PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 MinVersion=10.0.19041
 OutputDir=..\output\Library-Installer
-OutputBaseFilename=Khoj-Setup-0.5.0
-SetupIconFile=..\.cache\release-native\Library.ico
+OutputBaseFilename=PaperVault-Setup-0.5.0
+SetupIconFile=..\.cache\Library.ico
 UninstallDisplayIcon={app}\Library.exe
 WizardStyle=modern
 Compression=lzma2/fast
@@ -28,13 +28,14 @@ DisableProgramGroupPage=yes
 CloseApplications=yes
 RestartApplications=no
 SetupLogging=yes
-UninstallDisplayName=Khoj
+UninstallDisplayName=PaperVault
 VersionInfoVersion=0.5.0.0
-VersionInfoProductName=Khoj
+VersionInfoProductName=PaperVault
 InfoBeforeFile=release-info.txt
 
 [Tasks]
 Name: desktopicon; Description: "Create a desktop shortcut"; GroupDescription: "Shortcuts:"; Flags: unchecked
+Name: startupicon; Description: "Start PaperVault automatically when Windows starts"; GroupDescription: "Startup:"; Flags: checkedonce
 
 [Files]
 Source: "{#Payload}\*"; DestDir: "{app}"; Excludes: "*.pdb,*.map,*.pyc,*.pyo,\app\.cache\*,\data\*,Library.user.json"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -45,11 +46,12 @@ Type: files; Name: "{group}\Library.lnk"
 Type: files; Name: "{autodesktop}\Library.lnk"
 
 [Icons]
-Name: "{group}\Khoj"; Filename: "{app}\Library.exe"; WorkingDir: "{app}"
-Name: "{autodesktop}\Khoj"; Filename: "{app}\Library.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{group}\PaperVault"; Filename: "{app}\Library.exe"; WorkingDir: "{app}"
+Name: "{autodesktop}\PaperVault"; Filename: "{app}\Library.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{userstartup}\PaperVault"; Filename: "{app}\Library.exe"; Parameters: "--startup"; WorkingDir: "{app}"; Tasks: startupicon
 
 [Run]
-Filename: "{app}\Library.exe"; Description: "Open Khoj"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Library.exe"; Description: "Open PaperVault"; Flags: nowait postinstall skipifsilent
 
 [UninstallRun]
 Filename: "{app}\Library.exe"; Parameters: "--quit --wait"; Flags: runhidden waituntilterminated; RunOnceId: StopLibrary

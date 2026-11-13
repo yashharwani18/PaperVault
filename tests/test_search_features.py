@@ -74,3 +74,4 @@ def test_two_tier_fast_indexing_creates_partial_then_complete(session, tmp_path)
     tier1_events = [e for e in progress_events if e.get('stage') == 'tier1_ready']
     assert len(tier1_events) >= 1
     assert tier1_events[0]['page'] == 5
+
