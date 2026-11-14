@@ -38,6 +38,11 @@ Unlike tools that force you to manually curate folders or drag-and-drop files on
 ### Engineering highlights
 
 * **“Show me the 2.6k bill” finds the ₹2,614 invoice.** PaperVault expands `2.6k` to `2600` and looks for invoice totals within a small tolerance. It shows ₹2,614 as a nearby match, reports the ₹14 difference, and links to the original PDF page so you can check the amount. Add “exactly” to search for the exact amount.
+
+  The demo shows three ways to find the same synthetic ₹2,714 invoice. `2714 rs` matches the source text exactly. `2.7k rs total bill` and `2700 rs wala bill` find the total as a nearby match. Each query opens the original PDF.
+
+  ![PaperVault runs all three searches and opens the same synthetic invoice with a total of ₹2,714](docs/papervault-invoice-search.gif)
+
 * **Read the layout of scanned invoices.** When a scan has separate “Current Invoice” and “Previous Invoice” columns, PaperVault uses the positions of the headers and amounts to associate the total with the right column. If the layout is ambiguous, it marks the association as unresolved. A review is tied to the exact field on that version of the PDF, so a changed source requires a fresh review.
 * **See matches while the full search runs.** On Windows, PaperVault checks exact filenames first. For general content searches, a fast keyword lookup can show matching passages while the full search runs. These previews prioritize PDFs, then Word documents, spreadsheets such as CSV and XLSX, and slides such as PPTX. The full search ranks results by relevance.
 * **Rank pages as well as passages.** Hybrid search combines SQLite keyword ranks and embedding ranks with reciprocal rank fusion. Each ranking contributes at most one passage per page, so a page with many matching chunks gets one vote per ranking.
